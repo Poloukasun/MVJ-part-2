@@ -1,0 +1,171 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.confirmation {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.confirmation h2 {
+    font-size: 24px;
+    color: #1877f2;
+    margin: 0;
+}
+
+.confirmation p {
+    font-size: 16px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+
+}
+
+.header h1 {
+    font-size: 24px;
+    margin: 0;
+    color: #1877f2 !important;
+}
+
+.header a {
+    text-decoration: none;
+    color: #1877f2;
+}
+
+.header hr {
+    border: none;
+    border-top: 1px solid #fff;
+    width: 100%;
+}
+
+.registration-form {
+    margin-top: 20px;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.input-field {
+    flex: 1;
+    margin-bottom: 10px;
+}
+
+.input-field input[type="text"],
+.input-field input[type="email"],
+.input-field input[type="password"],
+.input-field input[type="date"],
+.input-field select,
+.gender {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+}
+
+.gender {
+    margin: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.gender:hover {
+    background-color: #b7babd;
+    cursor: pointer;
+}
+
+.radio-group label {
+    margin-right: 10px;
+}
+
+.signup-button {
+    background-color: #1877f2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    width: 300px;
+}
+
+.signup-button:hover {
+    background-color: #0e63a7;
+}
+
+.policy {
+    font-size: 10px;
+}
+
+.selected {
+    background-color: #b7babd;
+}
+
+.cancel {
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    position: relative;
+    font-size: 24px;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+}
+
+.cancel i {
+    color: #1877f2;
+}
+
+.cancel i:hover {
+    color: #0e63a7;
+}
+
+.cancel:hover {
+    color: rgb(222, 118, 118);
+}
+
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+    }
+
+    .input-field,
+    .gender {
+        width: 100%;
+    }
+}

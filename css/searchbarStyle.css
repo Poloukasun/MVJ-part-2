@@ -1,0 +1,80 @@
+/* Source code : https://codepen.io/liamj/pen/vYYLGZj*/
+
+.search-btn,
+.research-form {
+    background: var(--color-brand)
+}
+
+.search-btn {
+    position: absolute
+}
+
+:root {
+    --rad: .7rem;
+    --dur: .3s;
+    --loop-color: white;
+    --color-light: #fff;
+    --color-brand: #0D8CCC;
+    --font-fam: 'Lato', sans-serif;
+    --height: 4rem;
+    --btn-width: 6rem;
+    --bez: cubic-bezier(0, 0, 0.43, 1.49)
+}
+
+.research-form {
+    position: relative;
+    width: 30rem;
+    border-radius: var(--rad);
+    float: left !important;
+    margin-right: 20px;
+}
+
+#search {
+    width: 101%;
+    right: 1px;
+}
+
+.search-btn,
+.input-search {
+    height: var(--height);
+    font-family: var(--font-fam);
+    border: 0;
+    color: black;
+    font-size: 1.8rem
+}
+
+input[type=search] {
+    outline: 0;
+    width: 100%;
+    background: var(--color-light);
+    padding: 0 1.6rem;
+    border-radius: var(--rad);
+    appearance: none;
+    transition: all var(--dur) var(--bez);
+    transition-property: width, border-radius;
+    z-index: 1;
+    position: relative
+}
+
+.search-btn {
+    top: 0;
+    right: 0;
+    width: var(--btn-width);
+    font-weight: 700;
+    border-radius: var(--rad);
+    text-align: right;
+    padding-right: 30px;
+    color: var(--loop-color) !important;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #0f71a2;
+}
+
+.search-btn,
+.input-search:not(:placeholder-shown) {
+    width: calc(100% - var(--btn-width)) !important;
+    display: block
+}
