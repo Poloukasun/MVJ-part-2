@@ -27,10 +27,9 @@
         </div>
         <div>&nbsp;</div>
         <a href="./friends.php"><i class="fa-solid fa-user-group"><i class="label"> amis</i></i></a>
-        <a href="http://149.56.128.77/MVJ/groupe.php"><i class="fa-solid fa-people-group"><i class="label"> groupes</i></i></a>
-        <a href="#magasin"><i class="fa-solid fa-store"><i class="label"> magasin</i></i></a>
-        <a href="http://149.56.128.77/vladz/messenger.php"><i class="fa-solid fa-message"><i class="label"> messagerie</i></i></a>
+        <a href="./groupe.php"><i class="fa-solid fa-people-group"><i class="label"> groupes</i></i></a>
+        <a href="./messenger.php"><i class="fa-solid fa-message"><i class="label"> messagerie</i></i></a>
         <a href="./profil.php?myprofil"><i class="fa-solid fa-user"><i class="label"> profil</i></i></a>
-        <a href="http://149.56.128.77/js/index.php?disconnect"><i class="fa-solid fa-right-from-bracket"><i class="label"> deconnexion</i></i></a>
+        <a href="./index.php?disconnect"><i class="fa-solid fa-right-from-bracket"><i class="label"> deconnexion</i></i></a>
     </div>
 </header>
