@@ -12,7 +12,7 @@
 </head> <!---->
 
 <header>
-    <a href="http://149.56.128.77/js/index.php" title="MVJ">
+    <a href="./index.php" title="MVJ">
         <img id="mvjLogo" src="logo.png" alt="" class="logo">
     </a>
     <i class="fa-solid fa-bars fa-2xl hamburger"></i>
@@ -26,10 +26,10 @@
             </form>
         </div>
         <div>&nbsp;</div>
-        <a href="./friends.php"><i class="fa-solid fa-user-group"><i class="label"> amis</i></i></a>
-        <a href="./groupe.php"><i class="fa-solid fa-people-group"><i class="label"> groupes</i></i></a>
-        <a href="./messenger.php"><i class="fa-solid fa-message"><i class="label"> messagerie</i></i></a>
-        <a href="./profil.php?myprofil"><i class="fa-solid fa-user"><i class="label"> profil</i></i></a>
-        <a href="./index.php?disconnect"><i class="fa-solid fa-right-from-bracket"><i class="label"> deconnexion</i></i></a>
+        <a href="./friends.php" title="Amis"><i class="fa-solid fa-user-group"><i class="label"> amis</i></i></a>
+        <a href="./groupe.php" title="Groupes"><i class="fa-solid fa-people-group"><i class="label"> groupes</i></i></a>
+        <a href="./messenger.php" title="Messagerie"><i class="fa-solid fa-message"><i class="label"> messagerie</i></i></a>
+        <a href="./profil.php?myprofil" title="Profil"><i class="fa-solid fa-user"><i class="label"> profil</i></i></a>
+        <a href="./index.php?disconnect" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"><i class="label"> deconnexion</i></i></a>
     </div>
 </header>
