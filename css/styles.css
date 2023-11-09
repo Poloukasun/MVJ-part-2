@@ -1,0 +1,301 @@
+* {
+  box-sizing: border-box;
+
+}
+
+body {
+  background-color: rgb(220, 220, 220) !important;
+}
+
+a {
+  text-decoration: none;
+  color: #0770b1;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.container-login {
+  display: flex;
+  width: 90%;
+  height: fit-content !important;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.boxLogin {
+  background-color: white;
+  width: 450px;
+  top: 25%;
+  right: 15%;
+}
+
+.boxLogo {
+  width: 550px;
+  height: fit-content;
+  top: 25%;
+  left: 15%;
+}
+
+.submit {
+  width: 90%;
+  background-color: #0770b1;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.enregistrer {
+  width: 30%;
+  background-color: #10cf6d;
+  font-size: 18px;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.enregistrer:hover {
+  background-color: #1ca55e;
+}
+
+.modification {
+  width: 90%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.button {
+  background-color: #0770b1;
+  border: none;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 15%;
+}
+
+.centered-div {
+  width: 90%;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+}
+
+.connexion>input:not(input[type=submit]) {
+  padding: 20px 10px;
+  font-size: medium;
+}
+
+.create {
+  width: 90%;
+  background-color: #10cf6d;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1111px) {
+  .boxLogo {
+    height: fit-content;
+    margin-bottom: 2em;
+  }
+}
+
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  width: 10%;
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.groupe-container {
+  height: 100%;
+  width: 300px;
+  background-color: rgb(245, 245, 245);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+}
+
+.nav-groupe {
+  margin-left: 10px;
+  width: 90%;
+  margin-bottom: 10px;
+}
+
+.tout {
+  margin-left: 100px;
+  width: 90%;
+}
+
+.box-groupe {
+  background-color: #10cf6d;
+  display: flex;
+  justify-content: flex-start;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.box-groupe:hover {
+  background-color: #72ca9c;
+}
+
+.nom-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  font-weight: bold;
+  margin-left: 15px;
+}
+
+.choix {
+  border: none;
+  cursor: pointer;
+  height: 50px;
+  font-size: 20px;
+  transition: background-color 0.3s ease;
+  border-radius: 10px;
+}
+
+.choix:hover {
+  background-color: rgb(192, 192, 192);
+}
+
+.selected {
+  background-color: rgb(192, 192, 192);
+}
+
+
+
+.Bgroupe {
+  background-color: #007bff;
+  color: white;
+  width: 200px;
+  height: 30px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+}
+
+.Bgroupe:hover {
+  background-color: #1560b1;
+  cursor: pointer;
+}
+
+.createGroup {
+  background-color: #007bff;
+  margin-top: 30px;
+  width: 90%;
+  height: 30px;
+  font-size: 18px;
+  color: white;
+  border: none;
+  margin-left: 10px;
+}
+
+.createGroup:hover {
+  background-color: #1560b1;
+  cursor: pointer;
+}
+
+.groupImg {
+  border-radius: 5px;
+  width: 90%;
+  height: 40px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.centered-div2 {
+  width: 60%;
+  margin: 0 auto;
+  /* Pour centrer horizontalement */
+  background-color: rgb(245, 245, 245);
+  /* Couleur de fond (pour visualisation) */
+  padding: 20px;
+  /* Espace intérieur */
+  height: 63%;
+  margin-top: 5%;
+  border-radius: 10px;
+}
+
+.imageGroup {
+  width: 100%;
+  height: 40%;
+  background-image: url(../default-image.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+.titre-groupe {
+  margin-top: 5%;
+  font-size: 20px;
+  text-align: center;
+}
+
+.image-groupe {
+  background-size: cover;
+  background-position: center;
+  width: 298;
+  height: 220;
+}
+
+.apercu {
+  font-size: 20px;
+  margin-bottom: 1%;
+  font-weight: bold;
+  color: gray;
+}
+
+.name-group {
+  font-size: 30px;
+  margin-top: 1%;
+  font-weight: bold;
+  color: gray;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.confidentialite {
+  color: gray;
+  font-size: 18px;
+}
+
+.A-propos {
+  background-color: white;
+  height: 200px;
+  margin-top: 2%;
+  border-radius: 10px;
+}

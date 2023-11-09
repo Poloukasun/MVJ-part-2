@@ -1,0 +1,380 @@
+:root {
+    --pubHeight: 30em;
+    --pubWidth: 23em;
+    --marge: 3em;
+}
+
+body {
+    overflow-y: clip;
+    /* background: #f1f1f1; */
+    background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#fff)) fixed;
+    background-image: -webkit-linear-gradient(top, #f1f1f1 0%, #fff 600px);
+
+    /* background: orange !important; */
+
+}
+
+div.publications-container {
+    height: 100vh;
+    width: 100%;
+    overflow-y: scroll;
+    margin: 0 auto;
+
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    scroll-snap-type: y mandatory;
+
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 104px;
+}
+
+div.publications-container::-webkit-scrollbar {
+    display: none;
+}
+
+div.publication:not(:first-child) {
+    height: var(--pubHeight);
+}
+
+div.publication {
+    scroll-snap-align: start;
+    width: var(--pubWidth);
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    border-radius: 1em;
+    background-color: rgb(245, 245, 245);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    position: relative;
+}
+
+div.publication>i.more {
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    right: 5px;
+    top: 50px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    user-select: none;
+}
+
+.dropdown-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-menu li {
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.dropdown-menu li i {
+    width: 17px;
+    font-style: normal;
+}
+
+.dropdown-menu li:hover,
+.dropdown-menu li:active {
+    background-color: #cecece;
+}
+
+.comments {
+    background-color: #cecece;
+    height: 0;
+    min-width: var(--pubWidth);
+    position: absolute;
+    translate: -50%;
+    left: 50%;
+    transition-duration: 1s;
+    opacity: 0;
+    z-index: 100;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 3%;
+    overflow-y: scroll !important;
+}
+
+div.publication>*:not(.comments) {
+    transition: 1s;
+}
+
+.blur {
+    filter: blur(8px);
+}
+
+.comments.opened {
+    opacity: 1;
+    height: 80%;
+    width: 70%;
+    min-width: var(--pubWidth);
+}
+
+[contentEditable] {
+    position: absolute;
+    bottom: 20px;
+    font-size: large;
+    background-color: #fff;
+    border-radius: 7px;
+    border: 1px solid black;
+    padding: 5px;
+    width: 100%;
+    min-height: 3em;
+    outline: none;
+    overflow: auto;
+    max-height: 70%;
+}
+
+[contenteditable]:empty:before {
+    content: attr(placeholder);
+    pointer-events: none;
+    color: grey;
+    display: block;
+}
+
+.commentaire {
+    aspect-ratio: 4;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    height: fit-content;
+}
+
+.img-profil {
+    background-image: url(http://149.56.128.77/js/profil-default.jpg);
+    height: 40px;
+    aspect-ratio: 1;
+    background-size: contain;
+    background-position: center;
+    border-radius: 50%;
+}
+
+.comm-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.comm-name {
+    font-weight: bold;
+    flex: 2;
+    display: flex;
+    align-items: center;
+}
+
+.comm-txt {
+    flex: 5;
+}
+
+.no-scroll {
+    overflow-y: hidden !important;
+}
+
+@media screen and (min-height: 826px) {
+    :root {
+        --pubHeight: 46em;
+        --pubWidth: 40em;
+    }
+}
+
+@media screen and (min-height: 1130px) {
+    :root {
+        --pubHeight: 64em;
+        --pubWidth: 57em;
+    }
+}
+
+.image-pub {
+    display: flex;
+    justify-content: center;
+    overflow-y: hidden;
+}
+
+.image-pub img {
+    max-width: 100%;
+    max-height: 40vh;
+}
+
+i.cancel {
+    color: #1877f2;
+    cursor: pointer;
+}
+
+i.cancel:hover {
+    color: #0056b3;
+}
+
+i.cancel.none {
+    display: none;
+}
+
+.image-pub-container,
+#choosed {
+    width: var(--pubWidth);
+    height: calc(var(--pubHeight) - 200px);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.profil-pic-container {
+    margin: 5px 10px;
+
+    width: 4em;
+    height: 4em;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.infos-publication {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.profil-name a {
+    text-decoration: none;
+    color: black;
+    vertical-align: baseline;
+}
+
+.container-nom-date {
+    align-self: center;
+    text-align: left;
+    color: gray;
+}
+
+.publication .titre {
+    text-align: left;
+    padding: 5px 10px;
+}
+
+.publication hr {
+    width: 95%;
+    height: 1px;
+}
+
+.likes-comment-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.actions-pub {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.actions-pub * {
+    cursor: pointer;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.left-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.right-section {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+.file-choosed {
+    text-align: center;
+}
+
+.file-choosed#choosed {
+    width: auto !important;
+    height: 300px;
+}
+
+.file-label {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border-radius: 20px;
+}
+
+.file-label:hover {
+    background-color: #0056b3;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.publish {
+    display: flex;
+    justify-content: space-between;
+}
+
+.publication .container {
+    width: var(--pubWidth);
+    padding: 10px;
+}
