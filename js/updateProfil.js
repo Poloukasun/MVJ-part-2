@@ -2,10 +2,10 @@ import { getCookie, ajaxRequestFiles, defilerBas } from "./functions.js";
 
 const userKey = getCookie("userKey");
 let legend;
-let openMail=false;
-let openPass=false;
+let openMail = false;
+let openPass = false;
 
-function validerTousLesChamps () {
+function validerTousLesChamps() {
   validerChamps('bio');
   validerChamps('nom');
   validerChamps('prenom');
@@ -17,15 +17,15 @@ function validerTousLesChamps () {
 
 validerTousLesChamps();
 
-function validerChamps (inputId) {
+function validerChamps(inputId) {
   legend = $(`.${inputId}-legend`);
-  if($(`#${inputId}`).val().length === 0) {
-    legend.css('display','none');
+  if ($(`#${inputId}`).val().length === 0) {
+    legend.css('display', 'none');
   } else {
-    legend.css('display','block');
+    legend.css('display', 'block');
   }
 }
- 
+
 
 export const afficherNotification = (temps, message) => {
   let notification = document.getElementById("notification");
@@ -49,7 +49,7 @@ $(document).ready(() => {
     newUser.pass = $("#mdp").val();
     newUser.newPass = $("#Nmdp").val();
     newUser.file = $('#inputImage').prop("files")[0];
-    
+
     if (newUser.email === "") {
       newUser.email = $("#email").val();
     }
@@ -76,7 +76,7 @@ $(document).ready(() => {
         ".mdp"
       );
 
-      openPass=false;
+      openPass = false;
     });
     $("#Modif-mdp").on("click", (e) => {
       changeDisplay(
@@ -86,7 +86,7 @@ $(document).ready(() => {
         "block",
         ".mdp"
       );
-      openPass=true;
+      openPass = true;
       $("#mdp").val("");
       $("#Nmdp").val("");
       validerChamps("Nmdp");
@@ -101,7 +101,7 @@ $(document).ready(() => {
         "none",
         ".email"
       );
-      openMail=false;
+      openMail = false;
     });
     $("#Modif-email").on("click", (e) => {
       changeDisplay(
@@ -111,7 +111,7 @@ $(document).ready(() => {
         "block",
         ".email"
       );
-      openMail=true;
+      openMail = true;
       validerChamps("Nemail");
       validerChamps("email");
       defilerBas();
@@ -156,7 +156,7 @@ $(document).ready(() => {
     ajaxRequestFiles(data, "./server/update_user.php", "POST", (u) => {
       u = JSON.parse(u);
       console.log(u);
-      if(u) {
+      if (u) {
         $('.title-name').text(`${u.firstName} ${u.lastName}`);
         $('#nom').val(u.lastName);
         $('#prenom').val(u.firstName);
@@ -164,22 +164,20 @@ $(document).ready(() => {
         $("#email").val(u.email);
         $("#mdp").val(u.passwordHash);
         $("#Nmdp").val(u.passwordHash);
-        if(!u.profilePic) {
-          u.profilePic = "./profil-default.jpg";
+        if (!u.profilePic) {
+          u.profilePic = "profil/default-profile-pic-.jpg";
         }
         $("#thumb").attr("src", u.profilePic);
         afficherNotification(2000, "C'est fait!");
 
-        if(openMail) {
+        if (openMail) {
           $("#Nemail").val('');
         }
-        if(openPass) {
+        if (openPass) {
           $("#mdp").val('');
           $('#Nmdp').val('');
         }
-
         validerTousLesChamps();
-      
       }
     });
   });

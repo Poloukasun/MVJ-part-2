@@ -5,6 +5,10 @@
     /* position: fixed; */
 }
 
+* {
+    user-select: none;
+}
+
 .titre {
     font-size: 18px;
     font-weight: bold;
@@ -257,6 +261,7 @@
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 500px;
+    height: 1000px;
     margin-left: 30px;
     margin-top: 15px;
     position: absolute;

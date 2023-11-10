@@ -6,6 +6,10 @@ body {
     color: #495057;
 }
 
+* {
+    user-select: none;
+}
+
 .profile-header {
     display: flex;
     background-color: #ffffff;

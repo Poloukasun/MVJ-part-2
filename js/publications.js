@@ -79,7 +79,7 @@ function renderPublication(pub) {
         </div>
         </div>
     <div class="titre" dir="auto">${pub.description}</div>
-    <div class="image-pub-container" style="background-image: url(js/${pub.urlImage});">
+    <div class="image-pub-container" style="background-image: url(${pub.urlImage});">
     </div>
     <div class="likes-comment-container">
         <div class="nb-likes"  dir="auto">
@@ -221,8 +221,7 @@ function get() {
           }
         });
 
-        $(".commenter").off().on("click", function (e) {
-
+        $(".commenter, .nb-comments").off().on("click", function (e) {
           e.stopPropagation();
 
           const id = $(e.target).parent().parent().attr('id'); // id de la publication choisie
@@ -236,6 +235,10 @@ function get() {
           deleteCommentaire(id);
           forceRefreshPubs(id);
           quit();
+
+          if ($(this).hasClass("commenter")) {
+            $("#comment").focus();
+          }
         });
 
       });
@@ -256,8 +259,10 @@ function quit() {
 function renderFormComment(idPub) {
   return `
        <div class="comment-form">
-            <input type="text" id="comment" placeholder="Votre commentaire ici...">
-            <button id=${idPub} class="comment-btn">Commenter</button>
+            <input type="text" id="comment" placeholder="Écrivez un commentaire...">
+            <button id=${idPub} class="comment-btn">
+            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
         </div>
     `;
 }
@@ -286,6 +291,7 @@ function publish() {
           $("i.cancel").click();
           $("#thought").val("");
           get();
+          likePublication();
         }
       });
     }

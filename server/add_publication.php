@@ -1,7 +1,7 @@
 <?php
 require("publicationsDao.php");
 require("userDao.php");
-define("REP_IMAGE", "../publications/");
+define("REP_IMAGE", "publications/");
 
 if (isset($_FILES['file'])) {
     $desc = $_POST['desc'];

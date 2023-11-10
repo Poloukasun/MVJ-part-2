@@ -21,59 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
 $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
 ?>
 
-<style>
-    .comment-form {
-        text-align: center;
-        border: 1px solid #ccc;
-        background-color: #f0f0f0;
-        padding: 10px;
-        border-radius: 5px;
-    }
-
-    #comment[type="text"] {
-        width: 70%;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        outline: none;
-    }
-
-    .comment-btn {
-        background-color:#1877f2;
-        color: #fff;
-        padding: 5px 10px;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-        transition: background 0.3s ease;
-    }
-
-    .comment-btn:hover {
-        background-color: #1566d1;
-    }
-
-    .del-icon{
-        color:#8B0000; 
-        cursor:pointer;
-        transition: color 0.3s ease;
-    }
-
-    .del-icon:hover {
-        color: red;
-    }
-
-    #refreshPubs {
-        color:#1566d1;
-        cursor: pointer;
-        float: right;
-        margin:20px;
-        font-size: 30px;
-    }
-
-    
-
-</style>
-
 <body>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script type="module" src="./js/index.js"></script>
@@ -81,7 +28,7 @@ $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
     <script type="module" src></script>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+
     <div class="publications-container" dir="rtl">
         <div class="publication" id="post-form">
             <div class="container">

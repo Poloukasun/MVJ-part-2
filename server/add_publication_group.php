@@ -1,7 +1,7 @@
 <?php
 require("groupDao.php");
 require("userDao.php");
-define("REP_IMAGE", "../publicationsGroup/");
+define("REP_IMAGE", "publicationsGroup/");
 
 if (isset($_FILES['file'])) {
     $desc = $_POST['desc'];
@@ -13,12 +13,12 @@ if (isset($_FILES['file'])) {
     $user = UserDao::get_user_by($_POST['userKey'], 'userKey');
 
     // ajouter 
-     if (move_uploaded_file($_FILES['file']['tmp_name'], $newfilename)) {
-         $res = GroupDao::add_publication_group($newfilename, $desc, $user['idUser'], $idGroup);
+    if (move_uploaded_file($_FILES['file']['tmp_name'], $newfilename)) {
+        $res = GroupDao::add_publication_group($newfilename, $desc, $user['idUser'], $idGroup);
         if ($res) {
-             echo json_encode(true);
-         }
-     } else {
-         echo json_encode(false);
-     }
+            echo json_encode(true);
+        }
+    } else {
+        echo json_encode(false);
+    }
 }
