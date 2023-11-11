@@ -66,15 +66,20 @@ div.publication>i.more {
 }
 
 .dropdown-menu {
-    display: none;
     position: absolute;
     background-color: #fff;
-    border: 1px solid #ccc;
     right: 5px;
     top: 50px;
-    padding: 2px 7px;
     border-radius: 5px;
     user-select: none;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.show {
+    border: 1px solid #ccc;
+    padding: 2px 7px;
+    max-height: 150px;
 }
 
 .dropdown-menu ul {

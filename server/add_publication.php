@@ -1,7 +1,7 @@
 <?php
 require("publicationsDao.php");
 require("userDao.php");
-define("REP_IMAGE", "publications/");
+define("REP_IMAGE", "../publications/");
 
 if (isset($_FILES['file'])) {
     $desc = $_POST['desc'];
@@ -13,7 +13,7 @@ if (isset($_FILES['file'])) {
 
     // ajouter 
     if (move_uploaded_file($_FILES['file']['tmp_name'], $newfilename)) {
-        $res = PublicationDao::add_publication($newfilename, $desc, $user['idUser']);
+        $res = PublicationDao::add_publication(substr($newfilename, 1), $desc, $user['idUser']);
         if ($res) {
             echo json_encode(true);
         }

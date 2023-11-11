@@ -151,6 +151,7 @@ if ($user['profilePic'] == null) {
       cursor: pointer;
       border-radius: 5px;
       margin-right: 10px;
+      margin: 5px 0;
       transition: background-color 0.3s;
     }
 
@@ -235,7 +236,6 @@ if ($user['profilePic'] == null) {
             <input id="Nemail" name="Nemail" type="email" placeholder="Nouvelle adresse courriel" maxlength="60">
           </div>
         </div>
-
         <div class="btns">
           <button class="button" type="button" id="Modif-mdp">Modifier mot de passe</button>
           <button class="button" type="button" id="Modif-email">Modifier email</button>

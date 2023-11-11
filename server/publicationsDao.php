@@ -42,10 +42,19 @@ class PublicationDao extends AbstractDao
         return $statement->rowCount() > 0;
     }
 
-    public static function get_pub_id($id) {
+    public static function get_pub_id($id)
+    {
         $req = "Call getPubById(?)";
         $res = self::process($req, [$id])[1]->fetch(PDO::FETCH_ASSOC);
 
         return $res;
+    }
+
+    public static function delete_pub($userId, $id_pub)
+    {
+        $request = "Call deletePub(?, ?)";
+        $statement = self::process($request, [$userId, $id_pub])[1];
+
+        return $statement->rowCount() > 0;
     }
 }

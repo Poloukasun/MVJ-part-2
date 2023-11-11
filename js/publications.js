@@ -55,7 +55,7 @@ function renderPublication(pub) {
         </i>
           <i class="fa-regular fa-bookmark"></i>
         </li>
-        <li>
+        <li class="supprimer-pub">
         <i>
         Supprimer &nbsp
         </i>  
@@ -79,7 +79,7 @@ function renderPublication(pub) {
         </div>
         </div>
     <div class="titre" dir="auto">${pub.description}</div>
-    <div class="image-pub-container" style="background-image: url(${pub.urlImage});">
+    <div class="image-pub-container" style="background-image: url(./${pub.urlImage});">
     </div>
     <div class="likes-comment-container">
         <div class="nb-likes"  dir="auto">
@@ -142,47 +142,6 @@ function renderComment(comment) {
   `;
 }
 
-function renderFormPub() {
-  return `
-  <div class="publication" id="post-form">
-      <div class="container">
-          <div class="input-container" dir="auto">
-              <div class=" left-section">
-                  <a href="" class="profil-pic">
-                      <div class="profil-pic-container">
-                          <img src="no-avatar.jpg" alt="image profil">
-                      </div>
-                  </a>
-              </div>
-              <div class="right-section">
-                  <textarea id="thought" placeholder="Votre pensée..."></textarea>
-              </div>
-              <label id="share-btn" class="file-label" title="Publier">
-                  <i id="share" class="fa fa-paper-plane" aria-hidden="true"></i>
-              </label>
-          </div>
-          <hr>
-          <i class="fa-solid fa-circle-xmark fa-xl cancel none"></i>
-          <div class="file-choosed">
-              <span class="empty-file-msg">aucun fichier selectionné</span>
-          </div>
-          <hr>
-          <div class="publish">
-              <label for="choose-image" class="file-label" title="Choisir une image">
-                  <i class="fas fa-image" aria-hidden="true"></i>
-              </label>
-              <span><strong>Photo/Video</strong></span>
-              <label for="choose-video" class="file-label" title="Choisir une vidéo">
-                  <i class="fa fa-video-camera" aria-hidden="true"></i>
-              </label>
-              <input type="file" id="choose-image" name="image" accept="image/*">
-              <input type="file" name="video" id="choose-video">
-          </div>
-      </div>
-  </div>
-  `;
-}
-
 function forceRefreshPubs(id) {
   $("#refreshPubs").click(() => {
     requestComments(id);
@@ -208,7 +167,7 @@ function get() {
 
         $(".publications-container").append(renderPublication(pub));
         $("i.more").off().on("click", function () {
-          $(this).siblings(".dropdown-menu").slideToggle();
+          $(this).siblings(".dropdown-menu").toggleClass("show");
         });
 
 
@@ -312,6 +271,15 @@ function likePublication() {
   });
 }
 
+function deletePub() {
+  $(".supprimer-pub").on("click", (e) => {
+    idPub = e.target.closest(".publication").id;
+    ajaxRequest("POST", "./server/delete_pub.php", { userKey: userKey, idPub: idPub }, (data) => {
+      get();
+    });
+  });
+}
+
 
 //////////////////////
 ///////// COMMENTAIRES
@@ -369,9 +337,6 @@ function requestComments(id) {
       comments = res;
       viderContainer(".comments");
       $('.comments').append(renderFormComment(id));
-      // $('.comments').append(`
-      //   <i id='refreshPubs' class="fa fa-refresh" aria-hidden="true"></i>
-      // `);
       if (!$(".comments").hasClass("opened")) {
         $(".comments").append(renderComments(comments)).addClass("opened");
       }
@@ -385,4 +350,5 @@ $(document).ready(() => {
   likePublication();
   handlePubPic();
   publish();
+  deletePub();
 });
