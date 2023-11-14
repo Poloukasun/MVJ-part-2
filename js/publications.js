@@ -251,6 +251,7 @@ function publish() {
           $("#thought").val("");
           get();
           likePublication();
+          deletePub();
         }
       });
     }
@@ -273,9 +274,11 @@ function likePublication() {
 
 function deletePub() {
   $(".supprimer-pub").on("click", (e) => {
-    idPub = e.target.closest(".publication").id;
-    ajaxRequest("POST", "./server/delete_pub.php", { userKey: userKey, idPub: idPub }, (data) => {
+    let pub = e.target.closest(".publication");
+    ajaxRequest("POST", "./server/delete_pub.php", { userKey: userKey, idPub: pub.id }, (data) => {
+      pub.remove();
       get();
+      deletePub();
     });
   });
 }
