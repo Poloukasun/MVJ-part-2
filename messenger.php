@@ -19,6 +19,7 @@ if (!is_logged()) {
     <script type="module" src="js/messages.js"></script>
     <title>Messenger</title>
     <style>
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
