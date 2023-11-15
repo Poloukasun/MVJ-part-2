@@ -44,23 +44,23 @@ function renderPublication(pub) {
     <div class="dropdown-menu">
       <ul>
         <li>
-        <i>
-        Masquer &nbsp
-        </i>
+          <i>
+          Masquer &nbsp
+          </i>
           <i class="fa-regular fa-eye-slash"></i>
         </li>
         <li>
-        <i>
-          Enregistrer &nbsp
-        </i>
+          <i>
+            Enregistrer &nbsp
+          </i>
           <i class="fa-regular fa-bookmark"></i>
         </li>
-        <li class="supprimer-pub">
+        ${pub.isMine ? `<li class="supprimer-pub">
         <i>
         Supprimer &nbsp
         </i>  
-          <i class="fa-solid fa-xmark fa-lg"></i>
-        </li>
+        <i class="fa-solid fa-xmark fa-lg"></i>
+      </li>` : ''}
       </ul>
     </div>
     <div class="infos-publication">
@@ -79,7 +79,7 @@ function renderPublication(pub) {
         </div>
         </div>
     <div class="titre" dir="auto">${pub.description}</div>
-    <div class="image-pub-container" style="background-image: url(./${pub.urlImage});">
+    <div class="image-pub-container" style="background-image: url(${pub.urlImage});">
     </div>
     <div class="likes-comment-container">
         <div class="nb-likes"  dir="auto">
@@ -130,10 +130,10 @@ function renderComment(comment) {
   let admin = pubUserId === connectedUserId;
   let myComment = comment.userKey === userKey;
   let supprimer = myComment || admin ? `<i title='supprimer' class="fa fa-times-circle del-icon" id=${comment.idComment} aria-hidden="true"></i>` : "";
-
+  console.log(comment);
   return `
     <div class="commentaire" idPub=${comment.idPublication} idCom=${comment.idComment}>
-      <div class="img-profil"></div>
+      <div class="img-profil" style="background-image: url(${comment.profilePic})"></div>
         <div class="comm-container">
           <div class="comm-name">${comment.firstName} ${comment.lastName}</div>
           <div class="comm-txt">${comment.content} ${supprimer}</div>
@@ -198,6 +198,7 @@ function get() {
           if ($(this).hasClass("commenter")) {
             $("#comment").focus();
           }
+          $('.comments').scrollTop(0);
         });
 
       });

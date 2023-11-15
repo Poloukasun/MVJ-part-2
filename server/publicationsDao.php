@@ -10,10 +10,10 @@ class PublicationDao extends AbstractDao
         return $statement->rowCount() > 0;
     }
 
-    public static function get_all_pubs()
+    public static function get_all_pubs($id_user)
     {
-        $request = "Call getAllPub()";
-        $statement = self::process($request, [])[1]->fetchAll(PDO::FETCH_ASSOC);
+        $request = "Call getAllPub(?)";
+        $statement = self::process($request, [$id_user])[1]->fetchAll(PDO::FETCH_ASSOC);
 
         return $statement !== null ? $statement : null;
     }

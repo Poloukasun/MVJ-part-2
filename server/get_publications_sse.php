@@ -12,7 +12,7 @@ if (isset($_GET)) {
     $nb_pubs = (int)$_GET['nbPubs'];
     $user_key = $_GET['userKey'];
     $user = UserDao::get_user_by($user_key, "userKey");
-    $pubs = PublicationDao::get_all_pubs();
+    $pubs = PublicationDao::get_all_pubs($user['idUser']);
     $liked = PublicationDao::get_pub_liked_by_user($user['idUser']);
     $size = sizeof($pubs);
     // echo json_encode(is_int(sizeof($pubs)));
