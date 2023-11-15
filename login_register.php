@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     if ($user) {
       if (UserDao::is_confirmed($user)) {
         if (password_verify($_POST['pass'], $user['passwordHash'])) {
-          
+
           $_SESSION['userKey'] = $user['userKey'];
           $_SESSION['password'] = $user['passwordHash'];
           setcookie("userKey", $_SESSION['userKey'], 0, '/');
@@ -53,7 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
   <!-- login -->
   <div class="container" style="display: none;">
-    <img src="./logo.png" alt="" width="50" height="50">
+    <div class="logo"></div>
+    <br>
+    <br>
     <div class="header">
       <div class="header-left">
         <h1>S'inscrire</h1>
@@ -82,6 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
       </div>
     </div>
     <div class="form-row">
+      <label for="birthday">Date de naissance</label>
+    </div>
+    <div class="form-row">
       <div class="input-field">
         <input type="date" id="birthday" name="birthday" required>
       </div>
@@ -92,12 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
       </div>
     </div>
     <button type="submit" class="signup-button">Créer un compte</button>
-    <div class="policy">
-      <p>En cliquant sur créer un compte, vous acceptez nos <a href="">Conditions générales</a> , <a href="">Politique de
-          confidentialité</a> et notre <a href="">Politique d’utilisation des cookies</a>. Vous recevrez peut-être des
-        notifications par texto de notre part et vous pouvez à tout moment supprimer votre compte.
-      </p>
-    </div>
   </div>
 
   <div class="container-login">

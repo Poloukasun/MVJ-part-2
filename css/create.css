@@ -9,6 +9,19 @@ body {
     min-height: 100vh;
 }
 
+.logo {
+    background-image: url("../logo.png");
+    width: 50px;
+    height: 50px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    translate: -50%;
+}
+
 .confirmation {
     background-color: #fff;
     padding: 20px;
@@ -30,6 +43,8 @@ body {
 
 .container {
     max-width: 800px;
+    width: 50%;
+    min-width: 600px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
@@ -37,6 +52,7 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
+    position: relative;
 }
 
 .header {
@@ -71,7 +87,7 @@ body {
 .form-row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-bottom: 10px;
 }
 
@@ -92,6 +108,8 @@ body {
     border-radius: 5px;
     font-size: 16px;
 }
+
+
 
 .radio-group {
     display: flex;
@@ -128,10 +146,6 @@ body {
     background-color: #0e63a7;
 }
 
-.policy {
-    font-size: 10px;
-}
-
 .selected {
     background-color: #b7babd;
 }
@@ -159,6 +173,13 @@ body {
     color: rgb(222, 118, 118);
 }
 
+label[for=birthday] {
+    color: #717171;
+    display: block;
+    width: 91%;
+    text-align: left;
+}
+
 @media (max-width: 600px) {
     .form-row {
         flex-direction: column;
@@ -167,5 +188,10 @@ body {
     .input-field,
     .gender {
         width: 100%;
+    }
+
+    label[for=birthday] {
+        width: 58% !important;
+        text-align: unset;
     }
 }

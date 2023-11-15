@@ -130,7 +130,6 @@ function renderComment(comment) {
   let admin = pubUserId === connectedUserId;
   let myComment = comment.userKey === userKey;
   let supprimer = myComment || admin ? `<i title='supprimer' class="fa fa-times-circle del-icon" id=${comment.idComment} aria-hidden="true"></i>` : "";
-  console.log(comment);
   return `
     <div class="commentaire" idPub=${comment.idPublication} idCom=${comment.idComment}>
       <div class="img-profil" style="background-image: url(${comment.profilePic})"></div>
@@ -322,8 +321,9 @@ function addCommentaire() {
     if (commentaire.content.trim().length !== 0) {
       ajaxRequest("POST", "./server/add_comment.php", { commentaire: commentaire }, (res) => {
         if (res) {
+          console.log(res);
           $('.comments').append(renderComment(res));
-          $("#comment").val('');
+          $('#comment').val('');
           deleteCommentaire(res.idPublication);
         }
       });
