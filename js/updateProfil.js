@@ -37,8 +37,6 @@ export const afficherNotification = (temps, message) => {
   }, temps);
 };
 
-
-
 $(document).ready(() => {
   const updateUser = () => {
     const newUser = {};
@@ -56,6 +54,7 @@ $(document).ready(() => {
     }
     return newUser;
   };
+  
   const changeDisplay = (tag, NewId, text, dis, c) => {
     $(c).css("display", dis);
     $(tag).text(text);
@@ -120,11 +119,14 @@ $(document).ready(() => {
     });
   };
 
-  function delete_account() {
+  function deleteAccount() {
+    
     $("#del-acc").click((e) => {
+
       $(".update-form").hide();
       $(".confirm-box").show();
     });
+
     $(".no-btn").click(() => {
       $(".update-form").show();
       $(".confirm-box").hide();
@@ -197,5 +199,5 @@ $(document).ready(() => {
   });
   setListeners();
   uploadImage();
-  delete_account();
+  deleteAccount();
 });
