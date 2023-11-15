@@ -1,10 +1,10 @@
-<?php 
-require_once("header.php"); 
+<?php
+require_once("header.php");
 require_once("./sessions.php");
 session_start();
 
 if (!is_logged()) {
-    header("Location:login_register.php");  
+    header("Location:login_register.php");
 }
 
 ?>
@@ -19,7 +19,6 @@ if (!is_logged()) {
     <script type="module" src="js/messages.js"></script>
     <title>Messenger</title>
     <style>
-        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
@@ -168,11 +167,11 @@ if (!is_logged()) {
 
         .menu-button {
             cursor: pointer;
-            color:black;
+            color: black;
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .menu-button:hover { 
+        .menu-button:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
@@ -194,57 +193,157 @@ if (!is_logged()) {
         }
 
         .save-btn {
-            color:#007bff;
+            color: #007bff;
             transition: background 0.3s ease;
             cursor: pointer;
             font-size: 20px;
         }
 
         .save-btn:hover {
-            color:#0056b3;
+            color: #0056b3;
         }
 
-        
+        .checkbox-list {
+            width: 300px;
+            margin: auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            font-size: large;
+        }
 
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: large;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item label img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 3px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .buttons button:nth-child(2) {
+            background-color: #f44336;
+        }
+
+        .buttons button:hover,
+        .buttons button:focus {
+            opacity: 0.9;
+        }
+
+        .create-group-btn {
+            transition: transform 0.3s, box-shadow 0.3s;
+            color: #007bff;
+        }
+
+        .create-group-btn:hover {
+            color: #0056b3;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #groupName {
+            width: 100%;
+            margin-bottom: 15px;
+            height: 35px;
+            border-radius: 10px;
+            border-color: #ddd;
+            outline: none;
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        .private {
+            cursor: pointer;
+        }
+
+        .gr-creation {
+            margin-bottom: 10px;
+        }
+
+        input[type='checkbox'] {
+            cursor: pointer;
+        }
+
+        #friendsGroups {
+            padding: 8px 12px;
+            border: 2px solid #007bff;
+            border-radius: 6px;
+            box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.2);
+            background-color: white;
+            font-family: 'Times New Roman', serif;
+            font-size: 18px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #friendsGroups:hover {
+            border-color: #0056b3;
+        }
     </style>
 </head>
 
 <body>
 
-  
+    <div class="checkbox-list">
+
+        <!-- Ajout dynamique -->
+    </div>
 
     <div id="container">
 
         <div id="userList">
-            <h3 style="text-align: center;">Conversations</h3>
-            <hr>
+            <h3 style="text-align: center;">
+                <select id="friendsGroups">
+                    <option style="cursor: pointer;" value="f">Amis</option>
+                    <option value="g">Groupes</option>
+                </select>
+                <i title="créer un groupe" id="create-group-btn" style="font-size: larger; float:right; cursor:pointer" class="fa fa-plus-square create-group-btn" aria-hidden="true"></i>
+            </h3>
+            <hr>    
+               
         </div>
+        
         <div id="chatArea">
             <div class="no-friend-choosed">
                 <h3>Choisissez un ami pour partir une conversation</h3>
             </div>
         </div>
     </div>
-
-    <!-- <script>
-        document.getElementById("show-menu").addEventListener("click", function() {
-            var menu = document.getElementById("menu");
-            if (menu.style.display === "none") {
-                menu.style.display = "block";
-            } else {
-                menu.style.display = "none";
-            }
-        });
-
-        document.getElementById("edit").addEventListener("click", function() {
-            // Ajoutez ici le code à exécuter lorsque le bouton "Modifier" est cliqué.
-        });
-
-        document.getElementById("delete").addEventListener("click", function() {
-            // Ajoutez ici le code à exécuter lorsque le bouton "Supprimer" est cliqué.
-        });
-      
-    </script> -->
 </body>
 
 </html>
