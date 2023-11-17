@@ -258,6 +258,16 @@ i.cancel.none {
     background-repeat: no-repeat;
 }
 
+.image-pub-container.video {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+video {
+    max-height: calc(var(--pubHeight) - 200px);
+}
+
 .infos-publication {
     display: flex;
     flex-direction: row-reverse;

@@ -3,10 +3,10 @@ require_once("absDao.php");
 
 class PublicationDao extends AbstractDao
 {
-    public static function add_publication($src, $desc, $idUser)
+    public static function add_publication($src, $desc, $idUser, $isImage)
     {
-        $request = "Call addPublication(?,?,?)";
-        $statement = self::process($request, [$idUser, $src, $desc])[1];
+        $request = "Call addPublication(?,?,?,?)";
+        $statement = self::process($request, [$idUser, $src, $desc, $isImage])[1];
         return $statement->rowCount() > 0;
     }
 

@@ -62,11 +62,12 @@ $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
                         <i class="fa fa-video-camera" aria-hidden="true"></i>
                     </label>
                     <input type="file" id="choose-image" name="image" accept="image/*">
-                    <input type="file" name="video" id="choose-video">
+                    <input type="file" name="video" id="choose-video" accept="video/*">
                 </div>
             </div>
         </div>
     </div>
+
     <div class="comments" dir="ltr">
     </div>
 </body>

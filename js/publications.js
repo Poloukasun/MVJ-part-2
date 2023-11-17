@@ -79,7 +79,14 @@ function renderPublication(pub) {
         </div>
         </div>
     <div class="titre" dir="auto">${pub.description}</div>
+    ${pub.isImage == 1 ? `
     <div class="image-pub-container" style="background-image: url(${pub.urlImage});">
+    ` : `
+    <div class="image-pub-container video">
+    <video width="90%" controls loop muted>
+      <source src="${pub.urlImage}">
+      Your browser does not support the video tag.
+    </video>`}
     </div>
     <div class="likes-comment-container">
         <div class="nb-likes"  dir="auto">
@@ -235,7 +242,12 @@ function getPublications() {
 
 function publish() {
   $("#share-btn").on("click", function () {
-    const file = $("#choose-image").prop("files")[0];
+    let file = $("#choose-image").prop("files")[0];
+    let isImage = 1;
+    if (!file) {
+      file = $("#choose-video").prop("files")[0];
+      isImage = 0;
+    }
     const desc = $("#thought").val();
 
     if (file && desc.trim()) {
@@ -244,6 +256,7 @@ function publish() {
       formData.append("file", file);
       formData.append("userKey", userKey);
       formData.append("desc", desc);
+      formData.append("isImage", isImage)
 
       ajaxRequestFiles(formData, "./server/add_publication.php", "POST", (data) => {
         if (data) {
@@ -321,7 +334,6 @@ function addCommentaire() {
     if (commentaire.content.trim().length !== 0) {
       ajaxRequest("POST", "./server/add_comment.php", { commentaire: commentaire }, (res) => {
         if (res) {
-          console.log(res);
           $('.comments').append(renderComment(res));
           $('#comment').val('');
           deleteCommentaire(res.idPublication);

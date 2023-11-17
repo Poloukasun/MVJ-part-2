@@ -1,0 +1,40 @@
+body.about {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    color: #fff;
+    background-color: #f1f1f1;
+
+}
+
+.enHaut {
+    background-color: #1c2b33;
+    flex: 1;
+
+    display: grid;
+    place-content: center;
+    font-size: xx-large;
+}
+
+.auCentre {
+    flex: 4;
+    color: black;
+    font-size: x-large;
+
+}
+
+.enBas {
+    flex: 1;
+    background-color: #131a1f;
+    padding-left: 80px;
+    line-height: 34px;
+}
+
+.enBas div:first-child {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+b {
+    font-size: x-large;
+}

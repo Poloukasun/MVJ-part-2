@@ -30,6 +30,7 @@
         <a href="./groupe.php" title="Groupes"><i class="fa-solid fa-people-group"><i class="label"> groupes</i></i></a>
         <a href="./messenger.php" title="Messagerie"><i class="fa-solid fa-message"><i class="label"> messagerie</i></i></a>
         <a href="./profil.php?myprofil" title="Profil"><i class="fa-solid fa-user"><i class="label"> profil</i></i></a>
+        <a href="./about.php" title="À propos"><i class="fa-solid fa-circle-info"><i class="label">À propos</i></i></a>
         <a href="./index.php?disconnect" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"><i class="label"> deconnexion</i></i></a>
     </div>
 </header>
