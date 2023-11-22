@@ -37,6 +37,7 @@ function formatRelativeDate(dateStr) {
 
 function renderPublication(pub) {
   let str = pub.nbComms === 1 ? "commentaire" : "commentaires";
+  console.log(pub.userKey);
   return `
   <div class="publication" id=${pub.idPublication}>
     <i class="fa-solid fa-ellipsis fa-xl more" idPub="${pub.idPublication
@@ -49,7 +50,7 @@ function renderPublication(pub) {
           </i>
           <i class="fa-regular fa-eye-slash"></i>
         </li>
-        <li>
+        <li class="Enregistrer" id="${pub.idPublication}">
           <i>
             Enregistrer &nbsp
           </i>
@@ -64,7 +65,7 @@ function renderPublication(pub) {
       </ul>
     </div>
     <div class="infos-publication">
-        <a href="" class="profil-pic">
+        <a href="./profil.php?${pub.userKey}" class="profil-pic">
             <div class="profil-pic-container" style="background-image: url(${pub.profilePic ? pub.profilePic : './default-profile-pic-.jpg'})">
             </div>
         </a>
@@ -271,7 +272,30 @@ function likePublication() {
     });
   });
 }
-
+function Enregistrer(){
+  $(".Enregistrer").on("click", (e) => {
+    let pub = e.target.closest(".publication");
+    let pubEnregistrer = $(e.target).attr("id");
+    console.log(pubEnregistrer);
+    ajaxRequest("POST", "./server/enregistrer_pub.php", { "userKey": userKey, "idPub": pubEnregistrer }, (data) => {
+      if(data)
+      {
+        console.log(data);
+      }
+    });
+    // $("#Enregistrer").off("click",this);
+    // $("#Enregistrer").on("click", (e) =>{
+    //   ajaxRequest("POST", "./server/remove_recording_pub.php", { "userKey": userKey, "idPub": pub.id }, (data) => {
+    //     if(data)
+    //     {
+    //       console.log(data);
+    //       $("#Enregistrer").off("click", this);
+    //       Enregistrer();
+    //     }
+    //   });
+    // });
+  });
+}
 function deletePub() {
   $(".supprimer-pub").on("click", (e) => {
     let pub = e.target.closest(".publication");
@@ -355,4 +379,5 @@ $(document).ready(() => {
   handlePubPic();
   publish();
   deletePub();
+  Enregistrer();
 });

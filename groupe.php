@@ -62,7 +62,6 @@ else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
       <button class="nav-groupe choix" id="Create-btn"> <i class="fas fa-plus"></i> Créer un nouveau groupe</button>
       <hr style="width: 90%;">
       <span class="nav-groupe"><b>Groupes dont vous êtes membre</b></span><br>
-      <a class="tout">Tout voir</a><br>
       <!-- Affichage des groupes dont vous êtes membres -->
       <?php //GroupDao::Afficher_group_rejoin($user['idUser']) ?>
       <!-- Affichage des groupes rejoin -->

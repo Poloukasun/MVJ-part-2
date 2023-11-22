@@ -109,12 +109,12 @@ class UserDao extends AbstractDao
                         <div class="container-profil-pub">';
                 }
                 if ($row['urlImage'] != null) {
-                    echo '<div class="image-pub-profil" style="background-image: url(js/' . $row['urlImage'] . ')"></div>';
+                    echo '<div class="image-pub-profil" style="background-image: url(./' . $row['urlImage'] . ')"></div>';
                 }
             }
             echo '</div>';
             if ($pub == 0) {
-                echo '<div style="font-size: 24px; text-align:center;">Aucune publication</div>
+                echo '<div id="AucunePub" style="font-size: 24px; text-align:center;">Aucune publication</div>
                         <br>';
             }
         } catch (Exception $e) {

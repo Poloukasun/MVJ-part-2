@@ -240,7 +240,7 @@ div.desc {
   border-radius: 15px;
   cursor: pointer;
   width: 90%;
-  height: 4%;
+  height: 40px;
 }
 
 .box-groupe:hover {
