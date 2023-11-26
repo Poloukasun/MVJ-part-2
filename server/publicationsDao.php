@@ -33,6 +33,14 @@ class PublicationDao extends AbstractDao
 
         return $statement !== null ? $statement : null;
     }
+    public static function get_pub_record_by_user($id_user)
+    {
+        $request = "Call getRecordPubs(?)";
+        $statement = self::process($request, [$id_user])[1]->fetchAll(PDO::FETCH_ASSOC);
+
+        return $statement !== null ? $statement : null;
+    }
+    
 
     public static function like_pub($user, $id_pub)
     {

@@ -37,7 +37,7 @@ function formatRelativeDate(dateStr) {
 
 function renderPublication(pub) {
   let str = pub.nbComms === 1 ? "commentaire" : "commentaires";
-  console.log(pub.userKey);
+  console.log(pub.isRecording);
   return `
   <div class="publication" id=${pub.idPublication}>
     <i class="fa-solid fa-ellipsis fa-xl more" idPub="${pub.idPublication
@@ -51,10 +51,10 @@ function renderPublication(pub) {
           <i class="fa-regular fa-eye-slash"></i>
         </li>
         <li class="Enregistrer" id="${pub.idPublication}">
-          <i>
+          <i id="${pub.idPublication}">
             Enregistrer &nbsp
           </i>
-          <i class="fa-regular fa-bookmark"></i>
+          <i class="fa-regular fa-bookmark${pub.isRecording ? ' fa-solid' : ''}" idRecord="${pub.idPublication}" id="${pub.idPublication}"></i>
         </li>
         ${pub.isMine ? `<li class="supprimer-pub">
         <i>
@@ -158,12 +158,19 @@ function get() {
 
       pubs.forEach((pub) => {
         pub.isLiked = false;
+        pub.isRecording = false;
 
+        data[2].forEach((p) => {
+          if (p.idPub === pub.idPublication) {
+            pub.isRecording = true;
+          }
+        });
         data[1].forEach((p) => {
           if (p.idPublication === pub.idPublication) {
             pub.isLiked = true;
           }
         });
+        
 
         $(".publications-container").append(renderPublication(pub));
         $("i.more").off().on("click", function () {
@@ -274,26 +281,16 @@ function likePublication() {
 }
 function Enregistrer(){
   $(".Enregistrer").on("click", (e) => {
-    let pub = e.target.closest(".publication");
+    //let pub = e.target.closest(".publication");
     let pubEnregistrer = $(e.target).attr("id");
     console.log(pubEnregistrer);
     ajaxRequest("POST", "./server/enregistrer_pub.php", { "userKey": userKey, "idPub": pubEnregistrer }, (data) => {
       if(data)
       {
+        $(`[idRecord=${pubEnregistrer}]`).toggleClass("fa-solid");
         console.log(data);
       }
     });
-    // $("#Enregistrer").off("click",this);
-    // $("#Enregistrer").on("click", (e) =>{
-    //   ajaxRequest("POST", "./server/remove_recording_pub.php", { "userKey": userKey, "idPub": pub.id }, (data) => {
-    //     if(data)
-    //     {
-    //       console.log(data);
-    //       $("#Enregistrer").off("click", this);
-    //       Enregistrer();
-    //     }
-    //   });
-    // });
   });
 }
 function deletePub() {

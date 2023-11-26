@@ -9,17 +9,22 @@
         if(isset($_POST)) {
           $user = UserDao::get_user_by($_POST['userKey'], 'userKey');
           $idPub = $_POST['idPub'];
-          $inTable = MarketDao::pub_in_recording($user['idUser'], $idPub);
-          if($inTable === null)
-          {
+          // if ($user) {
+          //     if (MarketDao::add_enregistrement($user['idUser'], $idPub)) {
+          //         echo json_encode("oui");
+          //     }
+          // }
+          // $inTable = MarketDao::pub_in_recording($user['idUser'], $idPub);
+          // if($inTable === null)
+          // {
             $enregistrement = MarketDao::add_enregistrement($idPub, $user['idUser']);
             
             echo json_encode($enregistrement);
-          }
-          else
-          {
-            echo json_encode("deja enregistrer");
-          }
+          // }
+          // else
+          // {
+          //   echo json_encode("deja enregistrer");
+          // }
         }
     }
    

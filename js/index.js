@@ -77,16 +77,16 @@ function renderEnregistrements(pubs) {
     });
 }
 function renderEnregistrement(pub) {
-    // console.log(pub);
-    // if(pub.isImage == 0)
-    // { 
-    //     console.log(pub.urlImage);
-    //         return `<video class="image-pub-profil" controls loop webkit-playsinline playsinline>
-    //         <source src="${pub.urlImage}">
-    //         Your browser does not support the video tag.
-    //     </video>`;
+    console.log(pub);
+    if(pub.isImage == 0)
+    { 
+        console.log(pub.urlImage);
+            return `<video class="image-pub-profil" controls loop webkit-playsinline playsinline>
+            <source src="${pub.urlImage}">
+            Your browser does not support the video tag.
+        </video>`;
         
-    // }
+    }
     if(pub.isImage == 1)
     {
         return `<div class="image-pub-profil" style="background-image: url(${pub.urlImage})"></div>`;
