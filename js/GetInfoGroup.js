@@ -9,7 +9,7 @@ const Mamow = Kiet.getAttribute('idUser');
 document.addEventListener('DOMContentLoaded', () => {
   getProfilMember();
   getDemandeGroup();
-  
+
 
   let divGroup = document.getElementById('groupe');
   let divPub = document.getElementById('pub');
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let divAll = document.getElementById('all-Member');
   let spanMembre = document.getElementById('nbMembre');
   let spanDemande = document.getElementById('nbDemande');
-  
+
   renderMember(spanMembre);
   renderDemande(spanDemande);
 
@@ -34,10 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
   var boutonSupprimer = document.querySelector("#SupprimerGroupe");
   let idGroup = valeur.getAttribute("idGroup");
 
-  if(boutonSupprimer !== null){
+  if (boutonSupprimer !== null) {
     boutonSupprimer.addEventListener("click", function (e) {
 
-      ajaxRequest("POST", "./server/delete_group.php", {"idGroup": idGroup }, (data) => {
+      ajaxRequest("POST", "./server/delete_group.php", { "idGroup": idGroup }, (data) => {
         if (data) {
           console.log(data);
           window.location = './groupe.php';
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     });
   }
-  
+
 
   boutonQuitter.addEventListener("click", function (e) {
 
@@ -72,15 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
       let boutonExclure = document.getElementById('exclure-btn');
       console.log(boutonExclure);
       let divMembre = document.getElementById('bonhomme');
-      
+
       if (data.length > 0) {
-        if(boutonExclure !== null)
-        {
+        if (boutonExclure !== null) {
           let idUser = boutonExclure.getAttribute('iduser');
           let idGroup = valeur.getAttribute("idGroup");
-          boutonExclure.addEventListener("click", function (e){
+          boutonExclure.addEventListener("click", function (e) {
             ajaxRequest("POST", "./server/exclure_member_group.php", { "idUser": idUser, "idGroup": idGroup }, (data) => {
-             if(data){
+              if (data) {
                 console.log(data);
                 divMembre.remove();
                 renderMember(spanMembre);
@@ -88,16 +87,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
           });
         }
-        
-        
+
+
       }
       else {
-        $('#all-Member').text('Aucun membre outre vous');
+        $('#all-Member').text('Aucun membre excepté vous');
       }
     })
   });
-     
-  
+
+
 
   if (boutonDemande.style.display !== "none") {
     let boutonAccept = document.getElementById('accept-btn');
@@ -132,29 +131,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
-function renderMember(spanMembre){
+function renderMember(spanMembre) {
   let idGroup = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_nb_member.php", { 'idGroup': idGroup }, (data) => {
-    if(data)
-    {
+    if (data) {
       spanMembre.textContent = data.nbMember;
     }
   });
 }
-function renderDemande(spanDemande){
+function renderDemande(spanDemande) {
   let idGroup = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_nb_demande.php", { 'idGroup': idGroup }, (data) => {
-    if(data)
-    {
+    if (data) {
       console.log(data);
-      if(data.nbMember == 0)
-      {
+      if (data.nbMember == 0) {
         spanDemande.textContent = "0";
       }
-      else{
+      else {
         spanDemande.textContent = data.nbMember;
       }
-      
+
     }
   });
 }
@@ -166,7 +162,7 @@ function renderAlls(users) {
 function renderAll(user) {
   let message = "";
   console.log(user.idUser);
-  if(Mamow == idAdmin){
+  if (Mamow == idAdmin) {
     message = `<button style="width: 80%;margin-bottom: 10px;margin-top: 0px;"class="refuser bouton-accepter" id="exclure-btn" idUser="${user.idUser}" action="reject">Exclure</button>`
   }
   return `<div id="bonhomme" class="gallery" userKey="${user.userKey}">

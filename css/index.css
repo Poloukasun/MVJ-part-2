@@ -281,6 +281,14 @@ video {
     flex-direction: row-reverse;
 }
 
+.profil-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #616161;
+    width: calc(var(--pubWidth) - 10em);
+}
+
 .profil-name a {
     text-decoration: none;
     color: black;

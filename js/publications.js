@@ -52,8 +52,6 @@ function renderPublication(pub) {
           <i class="fa-regular fa-eye-slash"></i>
         </li>
         -->
-        <li>
-          <i>
         <li class="Enregistrer" id="${pub.idPublication}">
           <i id="${pub.idPublication}">
             Enregistrer &nbsp
@@ -74,7 +72,7 @@ function renderPublication(pub) {
             </div>
         </a>
         <div class="container-nom-date">
-            <div class="profil-name">
+            <div class="profil-name" dir="auto">
                 <a href="./profil.php?${pub.userKey}">
                   ${pub.groupName ? "<b>" + pub.groupName + "</b> - " : ""}
                   ${pub.firstName}
