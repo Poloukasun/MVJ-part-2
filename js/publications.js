@@ -37,7 +37,6 @@ function formatRelativeDate(dateStr) {
 
 function renderPublication(pub) {
   let str = pub.nbComms === 1 ? "commentaire" : "commentaires";
-  console.log(pub.isRecording);
   return `
   <div class="publication" id=${pub.idPublication}>
     <i class="fa-solid fa-ellipsis fa-xl more" idPub="${pub.idPublication
@@ -326,13 +325,7 @@ function publish() {
 function likePublication() {
   $(".aimer").on("click", (e) => {
     idPub = $(e.target).attr('idPub');
-
-    console.log(idPub);
-
     ajaxRequest("POST", "./server/like_pub.php", { userKey: userKey, idPub: idPub }, (data) => {
-
-      console.log(data);
-
       if (data) {
         $(`[idPubLike=${idPub}]`).text(data.nbLikes);
 
@@ -345,11 +338,9 @@ function Enregistrer() {
   $(".Enregistrer").on("click", (e) => {
     //let pub = e.target.closest(".publication");
     let pubEnregistrer = $(e.target).attr("id");
-    console.log(pubEnregistrer);
     ajaxRequest("POST", "./server/enregistrer_pub.php", { "userKey": userKey, "idPub": pubEnregistrer }, (data) => {
       if (data) {
         $(`[idRecord=${pubEnregistrer}]`).toggleClass("fa-solid");
-        console.log(data);
       }
     });
   });
