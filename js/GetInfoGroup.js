@@ -170,7 +170,7 @@ function renderAll(user) {
     message = `<button style="width: 80%;margin-bottom: 10px;margin-top: 0px;"class="refuser bouton-accepter" id="exclure-btn" idUser="${user.idUser}" action="reject">Exclure</button>`
   }
   return `<div id="bonhomme" class="gallery" userKey="${user.userKey}">
-  <a target="_blank" href="${user.profilePic}">
+  <a href="./profil.php?${user.userKey}">
     <img src="${user.profilePic}" width="600" height="400">
   </a>
   <div style="font-size:18px;" class="desc">${user.firstName} ${user.lastName}</div>
