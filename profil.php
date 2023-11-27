@@ -34,7 +34,9 @@ if ($user['profilePic'] == null) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/profil.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script type="module" src="./js/index.js"></script>
+  <script type="module" src="./js/profil.js"></script>
   <title>Profil</title>
 
 </head>
@@ -72,5 +74,7 @@ require_once("./header.php");
     <?php UserDao::Afficher_pub($user['idUser']); ?>
   </main>
 </body>
+
+<footer style="height: 100px;"></footer>
 
 </html>

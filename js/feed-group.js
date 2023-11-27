@@ -1,0 +1,22 @@
+import { handlePubPic } from "./index.js";
+
+$(document).ready(() => {
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
+    $("button.choix").on("click", () => {
+        $("#myDropdown").toggleClass("show");
+    });
+
+    handlePubPic();
+});

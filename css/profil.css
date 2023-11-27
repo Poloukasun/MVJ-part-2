@@ -91,8 +91,13 @@ hr {
 }
 
 .container-profil-pub {
-    display: flex;
+    /* display: flex;
     flex-wrap: wrap;
+    justify-content: center; */
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(505px, 1fr));
+    margin: auto;
 }
 
 .image-pub-profil {
@@ -100,5 +105,28 @@ hr {
     background-repeat: no-repeat;
     background-position: center;
     width: 500px;
+    height: 500px;
+    margin: 10px;
+    border: 1px solid rgb(173, 173, 173);
+    border-radius: 10px;
+    display: grid;
+    place-content: center;
+    place-self: center;
+    position: relative;
+}
+
+.titre {
+    position: absolute;
+    color: black;
+    background-color: #f4f7f6;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.image-pub-profil>video {
+    border-radius: 10px;
+    max-width: 500px;
     height: 500px;
 }

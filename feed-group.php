@@ -55,6 +55,7 @@ if (!GroupDao::user_in_group($user, $param_value)) {
   $_SESSION['idGroup'] = $param_value;
 }
 
+$pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
 ?>
 
 <!DOCTYPE html>
@@ -62,193 +63,17 @@ if (!GroupDao::user_in_group($user, $param_value)) {
 
 <head>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <script type="module" src="./js/getGroups.js" defer></script>
-  <script type="module" src="./js/GetInfoGroup.js" defer></script>
-  <script type="module" src="./js/publicationsGroup.js" defer></script>
-  <link rel="stylesheet" href="./css/styles.css">
+  <script type="module" src="js/getGroups.js" defer></script>
+  <script type="module" src="js/GetInfoGroup.js" defer></script>
+  <script type="module" src="js/publications.js" defer></script>
+  <script type="module" src="js/index.js" defer></script>
+  <script type="module" src="js/feed-group.js" defer></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/feed-group.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Groupe</title>
-  <style>
-    .imageSelect {
-      width: 50px;
-      height: 50px;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      border-radius: 10px;
-    }
-
-    .profileImage {
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      border: 1px solid #fff;
-    }
-
-    .imageGeant {
-      width: 80%;
-      height: 70%;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      margin-left: 10%;
-      box-shadow: 0px 5px 10px gray;
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
-    }
-
-    .divGroupe {
-      display: flex;
-      align-items: center;
-      margin-left: 10px;
-      width: 90%;
-      margin-bottom: 10px;
-      margin-top: 10px;
-    }
-
-    .divTitre {
-      display: grid;
-      /* justify-items: center; */
-      align-items: center;
-      justify-content: center;
-    }
-
-    .dropdown {
-      display: none;
-      position: absolute;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      right: 5px;
-      top: 50px;
-      padding: 2px 7px;
-      border-radius: 5px;
-      user-select: none;
-    }
-
-    .acceuil {
-      font-size: medium;
-      height: 40px;
-      background-color: #7dd7a9;
-      color: #013701;
-      width: 90%;
-      margin-left: 10px;
-      border: none;
-      cursor: pointer;
-      border-radius: 10px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-
-    .bigDiv {
-      width: 100%;
-      justify-items: center;
-      background-color: white;
-      height: 100%;
-    }
-
-    .nomGroupe {
-      font-size: xx-large;
-      font-weight: bold;
-      margin-left: 13%;
-      margin-top: 1%;
-    }
-
-    .image-container {
-      display: flex;
-      margin-left: 13%;
-    }
-
-    .image-container img {
-      border: 2px solid #fff;
-    }
-
-    /*  */
-    .dropbtn {
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: white;
-      min-width: 160px;
-      overflow: auto;
-      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-      z-index: 1;
-      margin-bottom: 10px;
-      margin-left: 17px;
-    }
-
-    .dropdown-content a {
-      color: black;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .dropdown-content a:hover {
-      background-color: #ddd;
-      cursor: pointer;
-    }
-
-    .show {
-      display: block;
-    }
-
-    .profil-pic-container {
-      margin: 5px 10px;
-      width: 4em;
-      height: 4em;
-      border-radius: 50%;
-      overflow: hidden;
-      margin-right: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-
-    .container-users {
-      height: fit-content;
-      grid-area: main;
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
-      grid-gap: 10px;
-      justify-content: flex-start;
-      align-content: flex-start;
-    }
-
-    div.gallery {
-      margin: 5px;
-      border: 1px solid #ccc;
-      float: left;
-      width: 180px;
-      background-color: white;
-      border-radius: 15px;
-      margin: 10px;
-    }
-
-    div.gallery:hover {
-      border: 1px solid #777;
-    }
-
-    div.gallery img {
-      width: 100%;
-      height: 240px;
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-    }
-
-    div.desc {
-      padding: 15px;
-      text-align: center;
-      font-weight: bold;
-    }
-  </style>
 </head>
 
 <body>
@@ -267,7 +92,7 @@ if (!GroupDao::user_in_group($user, $param_value)) {
           </div>
         </div>
       </a>
-      <button style="font-size: medium; height:40px; width:90%; margin-left:10px;" class="choix dropbtn" onclick="myFunction()" id="toggleButton">
+      <button style="font-size: medium; height:40px; width:90%; margin-left:10px;" class="choix dropbtn" id="toggleButton">
         <i class="fas fa-users-cog"></i> Membres <i class="fas fa-caret-down"></i></button>
       <div id="myDropdown" class="dropdown-content">
         <!-- DropdownList -->
@@ -305,18 +130,42 @@ if (!GroupDao::user_in_group($user, $param_value)) {
         <hr style="width: 90%; margin-left:5%">
       </div>
       <!-- Publications affiche ici -->
-      <div id="pub" style="background-color: #f1f1f1;;">
-        <div style="background-color: gray; background-color: gray;margin-top: 2%; width: 80%;margin-left: 10%;" class="container">
-          <?php echo '<div class="profil-pic-container" style="background-image: url(' . $user['profilePic'] . '); background-color:white"></div>' ?>
-          <input type="text" id="thought" placeholder="Exprimez-vous...">
-          <label for="choose-image"></label>
-          <input type="file" name="image" id="choose-image">
-          <span id="nomFichier"></span>
-          <input type="submit" id="share-btn">
-          <div></div>
-        </div>
-        <div class="publications-container">
+      <div id="pub" style="background-color: #f1f1f1;" dir="rtl">
+        <div class="publication" id="post-form">
+          <div class="container">
+            <div class="input-container" dir="auto">
+              <div class=" left-section">
+                <a href="" class="profil-pic">
+                  <div class="profil-pic-container" style="background-image: url(<?= $pPicUrl ? $pPicUrl : 'default-profile-pic-.jpg' ?>); margin: auto 20px 0 0">
+                  </div>
+                </a>
+              </div>
+              <div class="right-section">
+                <textarea id="thought" placeholder="Publier dans le groupe..."></textarea>
 
+              </div>
+              <label id="share-btn" class="file-label" title="Publier">
+                <i id="share" class="fa fa-paper-plane" aria-hidden="true"></i>
+              </label>
+            </div>
+            <hr>
+            <i class="fa-solid fa-circle-xmark fa-xl cancel none"></i>
+            <div class="file-choosed">
+              <span class="empty-file-msg">aucun fichier selectionné</span>
+            </div>
+            <hr>
+            <div class="publish">
+              <label for="choose-image" class="file-label" title="Choisir une image">
+                <i class="fas fa-image" aria-hidden="true"></i>
+              </label>
+              <span><strong>Photo/Video</strong></span>
+              <label for="choose-video" class="file-label" title="Choisir une vidéo">
+                <i class="fa fa-video-camera" aria-hidden="true"></i>
+              </label>
+              <input type="file" id="choose-image" name="image" accept="image/*">
+              <input type="file" name="video" id="choose-video" accept="video/*">
+            </div>
+          </div>
         </div>
       </div>
       <!-- Affichage des demandes pour rejoindre -->
@@ -330,30 +179,3 @@ if (!GroupDao::user_in_group($user, $param_value)) {
 </body>
 
 </html>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-
-    document.getElementById('choose-image').addEventListener('change', function() {
-      var nomFichier = document.getElementById('nomFichier');
-      nomFichier.textContent = this.files[0].name;
-    });
-    window.onclick = function(event) {
-      if (!event.target.matches('.dropbtn')) {
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-          var openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
-        }
-      }
-    }
-
-
-  });
-
-  function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
-  }
-</script>

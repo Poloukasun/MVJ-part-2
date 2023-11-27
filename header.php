@@ -1,6 +1,5 @@
 <!---->
 
-
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/headerStyle.css">
@@ -18,8 +17,8 @@
     <i class="fa-solid fa-bars fa-2xl hamburger"></i>
     <div class="header-right">
         <div class="searchBar-container">
-            <form class="research-form">
-                <input class="input-search input-t" id="search" type="search" placeholder="Rechercher dans mvj..." />
+            <form class="research-form" method="get">
+                <input class="input-search input-t" name="q" id="search" type="search" placeholder="Rechercher dans mvj..." />
                 <button class="search-btn" type="submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>

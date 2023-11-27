@@ -109,7 +109,21 @@ class UserDao extends AbstractDao
                         <div class="container-profil-pub">';
                 }
                 if ($row['urlImage'] != null) {
-                    echo '<div class="image-pub-profil" style="background-image: url(js/' . $row['urlImage'] . ')"></div>';
+                    $isImage = $row['isImage'];
+                    if ($isImage == 1) {
+                        echo '<div class="image-pub-profil" style="background-image: url(' . $row['urlImage'] . ')">
+                                <div class="titre" idpub="' . $row['idPublication'] . '">' . $row['description'] . '</div>
+                            </div>';
+                    } else if ($isImage == 0) {
+                        echo '
+                        <div class="image-pub-profil">
+                        <div class="titre" style="border-top: 1px solid rgb(173, 173, 173); top:-1px" idpub="' . $row['idPublication'] . '">' . $row['description'] . '</div>
+                        <video controls loop webkit-playsinline playsinline>
+                            <source src="' . $row['urlImage'] . '">
+                            Your browser does not support the video tag.
+                        </video>
+                        </div>';
+                    }
                 }
             }
             echo '</div>';

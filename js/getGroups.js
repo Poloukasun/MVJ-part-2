@@ -6,7 +6,7 @@ const userKey = getCookie('userKey');
 document.addEventListener('DOMContentLoaded', () => {
   getYourGroup();
   getGroup();
-  
+
   var boutons = document.querySelectorAll(".Bgroupe");
 
   // Parcourez tous les boutons pour ajouter un écouteur de clic à chacun
@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
         bouton.innerHTML = "Afficher le groupe";
         console.log($('.Bgroupe'));
         bouton.removeEventListener('click', this);
-        bouton.addEventListener('click', function(e){
+        bouton.addEventListener('click', function (e) {
           window.location = `./feed-group.php?${idGroup}`;
         });
-        
+
       }
       const value = { "idGroup": idGroup, "isPrivate": isPrivate, "userKey": userKey };
       // console.log(value);
@@ -40,12 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 function getGroup() {
-  ajaxRequest("POST", "./server/get_group.php", {'userKey': userKey}, (data) => {
+  ajaxRequest("POST", "./server/get_group.php", { 'userKey': userKey }, (data) => {
     renderGroups(data)
   });
 }
 function getYourGroup() {
-  ajaxRequest("POST", "./server/get_your_group.php", {'userKey': userKey}, (data) => {
+  ajaxRequest("POST", "./server/get_your_group.php", { 'userKey': userKey }, (data) => {
     renderYourGroups(data)
   });
 }
@@ -55,7 +55,7 @@ function renderYourGroup(groupe) {
   <span class="nom-box">${groupe.name}</span>
   </p></a>`;
 }
-function renderYourGroups(groupes){
+function renderYourGroups(groupes) {
   groupes.forEach(g => {
     $('#renderYourGroup').append(renderYourGroup(g));
   });
@@ -63,8 +63,7 @@ function renderYourGroups(groupes){
 function renderGroup(groupe) {
   let text = groupe.isJoin == 0 ? "Demande envoyé" : "Rejoindre le groupe";
   let bouton = `<button id='messagePriver' groupKey='${groupe.idGroupe}' isPrivate=${groupe.isPrivate}  class="Bgroupe" type="button">${text}</button>`;
-  if(groupe.isJoin == 0)
-  {
+  if (groupe.isJoin == 0) {
     bouton = `<button disabled  id='messagePriver' groupKey='${groupe.idGroupe}' isPrivate=${groupe.isPrivate}  class="Bgroupe2" type="button">${text}</button>`;
   }
   return `<div class="gallery" idGroupe='${groupe.idGroupe}'>

@@ -5,17 +5,6 @@ const userKey = getCookie("userKey");
 
 export function handlePubPic() {
     $('#choose-image').change((e) => {
-        // $(".file-choosed").empty().attr("id", "choosed");
-        // let file = e.target.files[0];
-        // if (file) {
-        //     $('#choose-video').val(''); // remove video file
-        //     $("i.cancel.none").toggleClass("none");
-        //     let reader = new FileReader();
-        //     reader.onload = ((e) => {
-        //         $(".file-choosed").css('background-image', 'url(' + e.target.result + ')');
-        //     });
-        //     reader.readAsDataURL(file);
-        // }
         changeFile('#choose-video', e);
     });
 
@@ -41,10 +30,17 @@ export function handlePubPic() {
                 let fileUrl = URL.createObjectURL(file);
                 if (fileUrl) {
                     $(".file-choosed").append(`
-                    <video width="90%" controls loop>
+                    <video width="90%" controls loop webkit-playsinline playsinline>
                         <source src="${fileUrl}">
                         Your browser does not support the video tag.
                     </video>`);
+                    let video = $(".file-choosed>video")[0];
+                    video.load();
+                    $(".publications-container").scroll(function () {
+                        if (!video.paused) {
+                            video.pause();
+                        }
+                    });
                 }
             }
         }

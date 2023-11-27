@@ -107,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         Connectez-vous au coeur de vos relations
       </div>
       <hr>
+      <a href="about.php">À propos de MVJ</a>
     </div>
     <div class="boxLogin">
       <form style="text-align: center;" method="POST" class="connexion">

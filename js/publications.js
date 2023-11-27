@@ -43,12 +43,14 @@ function renderPublication(pub) {
     }}"></i>
     <div class="dropdown-menu">
       <ul>
+      <!--
         <li>
           <i>
           Masquer &nbsp
           </i>
           <i class="fa-regular fa-eye-slash"></i>
         </li>
+        -->
         <li>
           <i>
             Enregistrer &nbsp
@@ -71,11 +73,12 @@ function renderPublication(pub) {
         <div class="container-nom-date">
             <div class="profil-name">
                 <a href="">
-                    ${pub.firstName}
-                    ${pub.lastName}
+                  ${pub.groupName ? "<b>" + pub.groupName + "</b> - " : ""}
+                  ${pub.firstName}
+                  ${pub.lastName}
                 </a>
             </div>
-            <div class="date-publication">${formatRelativeDate(pub.publicationDate)}</div>
+            <div class="date-publication" dir="auto">${formatRelativeDate(pub.publicationDate)}</div>
         </div>
         </div>
     <div class="titre" dir="auto">${pub.description}</div>
@@ -83,7 +86,7 @@ function renderPublication(pub) {
     <div class="image-pub-container" style="background-image: url(${pub.urlImage});">
     ` : `
     <div class="image-pub-container video">
-    <video width="90%" controls loop muted>
+    <video width="90%" controls loop webkit-playsinline playsinline>
       <source src="${pub.urlImage}">
       Your browser does not support the video tag.
     </video>`}
@@ -105,10 +108,10 @@ function renderPublication(pub) {
             commenter
             <i class="fa-regular fa-comment"></i>
         </div>
-        <div class="partager">
-            partager
-            <i class="fa-regular fa-share-from-square"></i>
-        </div>
+        <!-- <div class="partager">
+        partager
+        <i class="fa-regular fa-share-from-square"></i>
+    </div> -->
     </div>
   </div>
     `;
@@ -154,6 +157,12 @@ function forceRefreshPubs(id) {
   });
 }
 
+function search(pub, q) {
+  const name = (pub.firstName + " " + pub.lastName).toLowerCase();
+  const groupName = pub.groupName == null ? "" : pub.groupName.toLowerCase();
+  return name.includes(q) || pub.description.toLowerCase().includes(q) || groupName.includes(q);
+}
+
 function get() {
   ajaxRequest("GET", "./server/get_publications_sse.php", { userKey: userKey, nbPubs: nombrePubs }, (data) => {
     let pubs = data[0];
@@ -161,6 +170,27 @@ function get() {
       nombrePubs = pubs.length;
 
       $(".publications-container .publication:not(:first), .publications-container footer").remove();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      let searchReq = urlParams.get('q');
+      let searchId = urlParams.get('id');
+
+      $("#search").val(searchReq);
+
+      $('input[type=search]').on('search', function (e) {
+        if (e.target.value === "" && searchReq !== "") {
+          $(".research-form").submit();
+        }
+      });
+
+      if (searchReq) {
+        pubs = pubs.filter((pub) => search(pub, searchReq.toLocaleLowerCase()));
+      }
+
+      if (searchId) {
+        pubs = pubs.filter((pub) => pub.idPublication == searchId);
+        $("#post-form").remove();
+      }
 
       pubs.forEach((pub) => {
         pub.isLiked = false;
@@ -172,6 +202,17 @@ function get() {
         });
 
         $(".publications-container").append(renderPublication(pub));
+        let videos = document.querySelectorAll("video");
+        videos.forEach((video) => {
+          video.load();
+        });
+        $(".publications-container").scroll(function () {
+          videos.forEach((video) => {
+            if (!video.paused) {
+              video.pause();
+            }
+          });
+        });
         $("i.more").off().on("click", function () {
           $(this).siblings(".dropdown-menu").toggleClass("show");
         });
@@ -208,7 +249,7 @@ function get() {
         });
 
       });
-      $(".publications-container").append("<footer style='height: 200px'></footer>");
+      $(".publications-container").append("<footer style='height: 300px'></footer>");
     }
   });
 }
@@ -253,10 +294,13 @@ function publish() {
     if (file && desc.trim()) {
       let formData = new FormData();
 
+      const idGroup = window.location.pathname.split('/').includes('feed-group.php') ? parseInt(new URLSearchParams(window.location.search)) : null;
+
       formData.append("file", file);
       formData.append("userKey", userKey);
       formData.append("desc", desc);
       formData.append("isImage", isImage)
+      formData.append("idGroup", idGroup)
 
       ajaxRequestFiles(formData, "./server/add_publication.php", "POST", (data) => {
         if (data) {
@@ -274,7 +318,12 @@ function publish() {
 function likePublication() {
   $(".aimer").on("click", (e) => {
     idPub = $(e.target).attr('idPub');
+
+    console.log(idPub);
+
     ajaxRequest("POST", "./server/like_pub.php", { userKey: userKey, idPub: idPub }, (data) => {
+
+      console.log(data);
 
       if (data) {
         $(`[idPubLike=${idPub}]`).text(data.nbLikes);

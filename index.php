@@ -25,6 +25,7 @@ $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script type="module" src="./js/index.js"></script>
     <script type="module" src="./js/publications.js"></script>
+    <script type="module" src="js/searchIndex.js"></script>
     <script type="module" src></script>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">

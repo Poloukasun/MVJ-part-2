@@ -88,12 +88,18 @@ div.publication>i.more {
     margin: 0;
 }
 
+.supprimer-pub {
+    z-index: 2;
+}
+
 .dropdown-menu li {
     padding: 10px;
     text-align: center;
     cursor: pointer;
     border-radius: 5px;
     text-align: left;
+    position: relative;
+    z-index: 2;
 }
 
 .dropdown-menu li i {
@@ -225,6 +231,8 @@ div.publication>*:not(.comments) {
 i.cancel {
     color: #1877f2;
     cursor: pointer;
+    position: relative;
+    z-index: 1;
 }
 
 i.cancel:hover {
@@ -398,6 +406,7 @@ input[type="file"] {
 .publication .container {
     width: var(--pubWidth);
     padding: 10px;
+    display: initial;
 }
 
 .comment-form {
