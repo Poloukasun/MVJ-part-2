@@ -75,7 +75,7 @@ function renderPublication(pub) {
         </a>
         <div class="container-nom-date">
             <div class="profil-name">
-                <a href="">
+                <a href="./profil.php?${pub.userKey}">
                   ${pub.groupName ? "<b>" + pub.groupName + "</b> - " : ""}
                   ${pub.firstName}
                   ${pub.lastName}

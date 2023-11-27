@@ -104,6 +104,9 @@ function renderEnregistrements(pubs) {
     pubs.forEach(u => {
         $('#pubEnre').append(renderEnregistrement(u))
     });
+    $(".titre").off().on("click", (e) => {
+        window.location.href = "./index.php?id=" + e.target.getAttribute("idpub");
+    });
 }
 function renderEnregistrement(pub) {
     console.log(pub);
@@ -116,7 +119,10 @@ function renderEnregistrement(pub) {
 
     }
     if (pub.isImage == 1) {
-        return `<div class="image-pub-profil" style="background-image: url(${pub.urlImage})"></div>`;
+        return `<div class="image-pub-profil" style="background-image: url(${pub.urlImage})">
+                                <div class="titre" idpub="${pub.idPub}">${pub.description}</div>
+                            </div>`;
+        // return `<div class="image-pub-profil" style="background-image: url(${pub.urlImage})"></div>`;
     }
 
 }

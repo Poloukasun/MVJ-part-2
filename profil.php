@@ -8,19 +8,18 @@ if (!is_logged())
   header("Location:login_register.php");
 
 
-  $query_string = $_SERVER['QUERY_STRING'];
-  $idUserKey = getParamValue($query_string);
-  if($idUserKey == null)
-  {
-    header("Location:index.php");
-    exit;
-  }
+$query_string = $_SERVER['QUERY_STRING'];
+$idUserKey = getParamValue($query_string);
+if ($idUserKey == null) {
+  header("Location:index.php");
+  exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   if (isset($_GET)) {
     $connected_user = true;
     $user = UserDao::get_user_by($idUserKey, "userKey");
-    if($user == null){
+    if ($user == null) {
       header("Location:index.php");
       exit;
     }
@@ -63,7 +62,7 @@ function getParamValue($query_string)
   <script type="module" src="./js/profil.js"></script>
   <title>Profil</title>
   <style>
-    
+
   </style>
 </head>
 
@@ -81,9 +80,9 @@ require_once("./header.php");
       </div>
       <div class="profile-info">
         <h1 class="profile-name"><?= $user['firstName'] ?> <?= $user['lastName'] ?>
-        <?php if ($connected_user && $idUserKey == $_SESSION['userKey']) : ?>
-          <button class="btn-modify">Modifier mon profil</button>
-        <?php endif; ?>
+          <?php if ($connected_user && $idUserKey == $_SESSION['userKey']) : ?>
+            <button class="btn-modify">Modifier mon profil</button>
+          <?php endif; ?>
         </h1>
         <div class="profile-stats">
           <span class="publications"><?= $nbPublication['nb_pub'] ?> publications</span> |
@@ -96,10 +95,10 @@ require_once("./header.php");
         <!--  -->
       </div>
       <?php if ($connected_user && $idUserKey == $_SESSION['userKey']) : ?>
-      <div>
-        <label for="back">Personnaliser la couleur du fond <input type="checkbox" name="" id="back"></label>
-        <input type="color" name="" id="back-color">
-      </div>
+        <div>
+          <label for="back">Personnaliser la couleur du fond <input type="checkbox" name="" id="back"></label>
+          <input type="color" name="" id="back-color">
+        </div>
       <?php endif; ?>
 
     </div>
