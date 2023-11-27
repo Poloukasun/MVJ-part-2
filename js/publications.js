@@ -37,6 +37,7 @@ function formatRelativeDate(dateStr) {
 
 function renderPublication(pub) {
   let str = pub.nbComms === 1 ? "commentaire" : "commentaires";
+  console.log(pub.isRecording);
   return `
   <div class="publication" id=${pub.idPublication}>
     <i class="fa-solid fa-ellipsis fa-xl more" idPub="${pub.idPublication
@@ -53,9 +54,11 @@ function renderPublication(pub) {
         -->
         <li>
           <i>
+        <li class="Enregistrer" id="${pub.idPublication}">
+          <i id="${pub.idPublication}">
             Enregistrer &nbsp
           </i>
-          <i class="fa-regular fa-bookmark"></i>
+          <i class="fa-regular fa-bookmark${pub.isRecording ? ' fa-solid' : ''}" idRecord="${pub.idPublication}" id="${pub.idPublication}"></i>
         </li>
         ${pub.isMine ? `<li class="supprimer-pub">
         <i>
@@ -66,7 +69,7 @@ function renderPublication(pub) {
       </ul>
     </div>
     <div class="infos-publication">
-        <a href="" class="profil-pic">
+        <a href="./profil.php?${pub.userKey}" class="profil-pic">
             <div class="profil-pic-container" style="background-image: url(${pub.profilePic ? pub.profilePic : './default-profile-pic-.jpg'})">
             </div>
         </a>
@@ -194,12 +197,19 @@ function get() {
 
       pubs.forEach((pub) => {
         pub.isLiked = false;
+        pub.isRecording = false;
 
+        data[2].forEach((p) => {
+          if (p.idPub === pub.idPublication) {
+            pub.isRecording = true;
+          }
+        });
         data[1].forEach((p) => {
           if (p.idPublication === pub.idPublication) {
             pub.isLiked = true;
           }
         });
+
 
         $(".publications-container").append(renderPublication(pub));
         let videos = document.querySelectorAll("video");
@@ -333,7 +343,19 @@ function likePublication() {
     });
   });
 }
-
+function Enregistrer() {
+  $(".Enregistrer").on("click", (e) => {
+    //let pub = e.target.closest(".publication");
+    let pubEnregistrer = $(e.target).attr("id");
+    console.log(pubEnregistrer);
+    ajaxRequest("POST", "./server/enregistrer_pub.php", { "userKey": userKey, "idPub": pubEnregistrer }, (data) => {
+      if (data) {
+        $(`[idRecord=${pubEnregistrer}]`).toggleClass("fa-solid");
+        console.log(data);
+      }
+    });
+  });
+}
 function deletePub() {
   $(".supprimer-pub").on("click", (e) => {
     let pub = e.target.closest(".publication");
@@ -416,4 +438,5 @@ $(document).ready(() => {
   handlePubPic();
   publish();
   deletePub();
+  Enregistrer();
 });

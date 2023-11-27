@@ -99,8 +99,9 @@ const renderFriends = (friends) => {
 const renderUser = (user, element) => {
   return `
           <div class="profil" userKey='${user.userKey}'>
-            <div style='background-image:url(${user.profilePic ?? "./profil-default.jpg"})' class="photo-profil">
-            </div>
+            <a href="./profil.php?${user.userKey}" style="text-decoration: none;">
+              <div style='background-image:url(${user.profilePic ?? "./profil-default.jpg"})' class="photo-profil"></div>
+            </a>
             <div class="nom">${user.firstName} ${user.lastName}</div>
             <div class='state'>
               ${element}

@@ -2,7 +2,7 @@
 require_once("./header.php");
 require_once("./sessions.php");
 require_once("./server/userDao.php");
-session_start();
+@session_start();
 
 if (!is_logged()) {
     header("Location:login_register.php");
@@ -35,7 +35,7 @@ $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
             <div class="container">
                 <div class="input-container" dir="auto">
                     <div class=" left-section">
-                        <a href="" class="profil-pic">
+                        <a href="./profil.php?<?= $_SESSION['userKey'] ?>" class="profil-pic">
                             <div class="profil-pic-container" style="background-image: url(<?= $pPicUrl ? $pPicUrl : 'default-profile-pic-.jpg' ?>); margin: auto 20px 0 0">
                             </div>
                         </a>

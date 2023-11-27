@@ -23,7 +23,7 @@ else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
     <div class="groupe-container">
       <h1 class="nav-groupe">Céer un groupe</h1>
       <div style="display: flex;" class="nav-groupe">
-        <img src="profil-default.jpg" style="width: 40px; border-radius:50%;">
+        <div style="background-image: url(<?= $user['profilePic'] ?>);width: 40px;height:40px; border-radius:50%;background-size: cover;background-position: center;background-repeat: no-repeat;"></div>
         <div style="display: grid; margin-left:10px;">
           <span> <?= $user['firstName'] ?> <?= $user['lastName'] ?></span>
           <span style="font-size: 13px; color:gray;"> Admin</span>
@@ -45,6 +45,7 @@ else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
     <!-- Coter droit -->
 
     <div class="centered-div2">
+      <div>
       <div class="apercu">Aperçu du groupe</div>
       <!-- <img style="width: 100%; height: 40%;" src="default-image.jpg"><br> -->
       <div class="imageGroup" id="imageDiv"></div>
@@ -58,6 +59,7 @@ else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
           <div id="Option" style="margin-top: 1%;font-size: 18px;margin-bottom: 1%;"></div>
           <span id="info-Option"></span>
         </div>
+      </div>
       </div>
     </div>
  

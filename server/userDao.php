@@ -128,7 +128,7 @@ class UserDao extends AbstractDao
             }
             echo '</div>';
             if ($pub == 0) {
-                echo '<div style="font-size: 24px; text-align:center;">Aucune publication</div>
+                echo '<div id="AucunePub" style="font-size: 24px; text-align:center;">Aucune publication</div>
                         <br>';
             }
         } catch (Exception $e) {
