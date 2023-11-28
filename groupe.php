@@ -51,13 +51,31 @@ else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
     padding: 15px;
     text-align: center;
   }
+  #refresh-all {
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  #refresh-all:hover {
+      transform: translateY(-5px);
+  }
+  @keyframes spin{
+    0%{
+      transform: rotate(0deg);
+    }
+    100%{
+      transform: rotate(360deg);
+    }
+  }
+  .spin{
+    animation: spin 1s linear infinite;
+  }
 </style>
 
 <body>
   <div style="display: flex; height:100%">
     <!-- le nav sur le coter gauche -->
     <div class="groupe-container">
-      <h1 class="nav-groupe">Groupes</h1>
+      <h1 class="nav-groupe">Groupes <i title="Tout rafraichir" id="refresh-all" class="fa fa-refresh" aria-hidden="true"></i></h1>
       <button class="nav-groupe choix selected" id="all-btn"> <i class="far fa-calendar-alt"></i> Tous les groupes</button><br>
       <button class="nav-groupe choix" id="Create-btn"> <i class="fas fa-plus"></i> Créer un nouveau groupe</button>
       <hr style="width: 90%;">
@@ -93,6 +111,6 @@ else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
       document.location.href = './groupCreation.php';
     });
 
-
+    
   });
 </script>

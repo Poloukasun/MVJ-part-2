@@ -116,7 +116,7 @@ $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
       }
       ?>
       <a href="./groupe.php"><button class="acceuil">
-          <i class="fas fa-home"></i> Acceuil de la communauté</button></a>
+          <i class="fas fa-home"></i> Accueil de la communauté</button></a>
 
     </div>
     <!-- Affichage des groupes rejoin -->
