@@ -46,7 +46,7 @@ export function handlePubPic() {
         }
     }
 
-    $('i.cancel').click(() => {
+    $('i.cancel').off().click(() => {
         $('#choose-image').val(''); // remove file
         $('#choose-video').val(''); // remove file
         $(".file-choosed").empty().css('background-image', 'none').removeAttr('id'); // empty container / remove image / remove id=choosed
@@ -104,19 +104,47 @@ function renderEnregistrements(pubs) {
     pubs.forEach(u => {
         $('#pubEnre').append(renderEnregistrement(u))
     });
+    $(".titre").off().on("click", (e) => {
+        window.location.href = "./index.php?id=" + e.target.getAttribute("idpub");
+    });
+    let videos = document.querySelectorAll("video");
+    videos.forEach(video => {
+        video.load();
+        video.addEventListener("click", () => {
+            videos.forEach(otherVideo => {
+                if (otherVideo !== video && !otherVideo.paused) {
+                    otherVideo.pause();
+                }
+            });
+        });
+    });
+
+    $(document).scroll(function () {
+        videos.forEach((video) => {
+            if (!video.paused) {
+                video.pause();
+            }
+        });
+    });
 }
 function renderEnregistrement(pub) {
     console.log(pub);
     if (pub.isImage == 0) {
         console.log(pub.urlImage);
-        return `<video class="image-pub-profil" controls loop webkit-playsinline playsinline>
+        return `
+        <div class="image-pub-profil">
+        <div class="titre" style="border-top: 1px solid rgb(173, 173, 173); top:-1px" idpub="${pub.idPub}">${pub.description}</div>
+        <video controls loop webkit-playsinline playsinline>
             <source src="${pub.urlImage}">
             Your browser does not support the video tag.
-        </video>`;
+        </video>
+        </div>`;
 
     }
     if (pub.isImage == 1) {
-        return `<div class="image-pub-profil" style="background-image: url(${pub.urlImage})"></div>`;
+        return `<div class="image-pub-profil" style="background-image: url(${pub.urlImage})">
+                                <div class="titre" idpub="${pub.idPub}">${pub.description}</div>
+                            </div>`;
     }
 
 }

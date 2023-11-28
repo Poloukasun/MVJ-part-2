@@ -20,19 +20,24 @@
     <i class="fa-solid fa-bars fa-2xl hamburger"></i>
     <div class="header-right">
         <div class="searchBar-container">
-            <form class="research-form" method="get">
-                <input class="input-search input-t" name="q" id="search" type="search" placeholder="Rechercher dans mvj..." />
-                <button class="search-btn" type="submit">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </form>
+            <?php if (str_contains((strtok($_SERVER["REQUEST_URI"], '?')), 'friends.php')) { ?>
+                <form class="research-form" method="get" action="friends.php">
+                <?php } else {
+                ?>
+                    <form class="research-form" method="get" action="index.php">
+                    <?php } ?>
+                    <input class="input-search input-t" name="q" id="search" type="search" placeholder="Rechercher dans mvj..." />
+                    <button class="search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    </form>
         </div>
         <div>&nbsp;</div>
         <a href="./friends.php" title="Amis"><i class="fa-solid fa-user-group"><i class="label"> amis</i></i></a>
         <a href="./groupe.php" title="Groupes"><i class="fa-solid fa-people-group"><i class="label"> groupes</i></i></a>
         <a href="./market.php" title="Market"><i class="fa-solid fa-store"><i class="label"> magasin</i></i></a>
         <a href="./messenger.php" title="Messagerie"><i class="fa-solid fa-message"><i class="label"> messagerie</i></i></a>
-        <a href="./profil.php?<?= $_SESSION['userKey'] ?>" title="Profil"><i class="fa-solid fa-user"><i class="label"> profil</i></i></a>
+        <a href="./profil.php?<?= isset($_SESSION['userKey']) ? $_SESSION['userKey'] : '' ?>" title="Profil"><i class="fa-solid fa-user"><i class="label"> profil</i></i></a>
         <a href="./index.php?disconnect" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"><i class="label"> deconnexion</i></i></a>
     </div>
 </header>

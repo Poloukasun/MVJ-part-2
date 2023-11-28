@@ -237,6 +237,7 @@ function get(vider = true) {
       if (vider)
         viderContainer(".container-users");
       renderUsers(data, userKey);
+      console.log(data);
     }
   });
 }

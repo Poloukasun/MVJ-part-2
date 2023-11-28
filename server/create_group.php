@@ -11,7 +11,8 @@ if (isset($_FILES['file'])) {
 
   $user = UserDao::get_user_by($_POST['userKey'], 'userKey');
 
-  $newfilename = REP_IMAGE . $_POST['nom'] . '.' . $filetype;
+  // $newfilename = REP_IMAGE . $_POST['nom'] . '.' . $filetype;
+  $newfilename = REP_IMAGE . uniqid() . preg_replace('/[^A-Za-z0-9\-]/', '', '-' . str_replace(' ', '-', $_POST['nom'])) . '.' . $filetype;
 
   if (move_uploaded_file($_FILES['file']['tmp_name'], $newfilename)) {
     $filename = substr($newfilename, 1);

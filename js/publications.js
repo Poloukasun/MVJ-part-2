@@ -37,7 +37,6 @@ function formatRelativeDate(dateStr) {
 
 function renderPublication(pub) {
   let str = pub.nbComms === 1 ? "commentaire" : "commentaires";
-  console.log(pub.isRecording);
   return `
   <div class="publication" id=${pub.idPublication}>
     <i class="fa-solid fa-ellipsis fa-xl more" idPub="${pub.idPublication
@@ -52,8 +51,6 @@ function renderPublication(pub) {
           <i class="fa-regular fa-eye-slash"></i>
         </li>
         -->
-        <li>
-          <i>
         <li class="Enregistrer" id="${pub.idPublication}">
           <i id="${pub.idPublication}">
             Enregistrer &nbsp
@@ -74,8 +71,8 @@ function renderPublication(pub) {
             </div>
         </a>
         <div class="container-nom-date">
-            <div class="profil-name">
-                <a href="">
+            <div class="profil-name" dir="auto">
+                <a href="./profil.php?${pub.userKey}">
                   ${pub.groupName ? "<b>" + pub.groupName + "</b> - " : ""}
                   ${pub.firstName}
                   ${pub.lastName}
@@ -278,7 +275,7 @@ function renderFormComment(idPub) {
        <div class="comment-form">
             <input type="text" id="comment" placeholder="Écrivez un commentaire...">
             <button id=${idPub} class="comment-btn">
-            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            <i class="fa fa-paper-plane" id=${idPub} aria-hidden="true"></i>
             </button>
         </div>
     `;
@@ -328,13 +325,7 @@ function publish() {
 function likePublication() {
   $(".aimer").on("click", (e) => {
     idPub = $(e.target).attr('idPub');
-
-    console.log(idPub);
-
     ajaxRequest("POST", "./server/like_pub.php", { userKey: userKey, idPub: idPub }, (data) => {
-
-      console.log(data);
-
       if (data) {
         $(`[idPubLike=${idPub}]`).text(data.nbLikes);
 
@@ -347,11 +338,9 @@ function Enregistrer() {
   $(".Enregistrer").on("click", (e) => {
     //let pub = e.target.closest(".publication");
     let pubEnregistrer = $(e.target).attr("id");
-    console.log(pubEnregistrer);
     ajaxRequest("POST", "./server/enregistrer_pub.php", { "userKey": userKey, "idPub": pubEnregistrer }, (data) => {
       if (data) {
         $(`[idRecord=${pubEnregistrer}]`).toggleClass("fa-solid");
-        console.log(data);
       }
     });
   });
@@ -379,6 +368,9 @@ function deleteCommentaire(idPub) {
     ajaxRequest("POST", "./server/delete_comment.php", { idComment: id, idPub: idPub }, (res) => {
       if (res) {
         $(divCommentaire).hide();
+        let nbComm = $('.publication[id="' + idPub + '"]').find('div.nb-comments');
+        let text = nbComm.text().split(' ');
+        nbComm.html((--text[0]) + " " + text[1]);
       }
     });
 
@@ -408,6 +400,9 @@ function addCommentaire() {
           $('.comments').append(renderComment(res));
           $('#comment').val('');
           deleteCommentaire(res.idPublication);
+          let nbComm = $('.publication[id="' + idPub + '"]').find('div.nb-comments');
+          let text = nbComm.text().split(' ');
+          nbComm.html((++text[0]) + " " + text[1]);
         }
       });
     } else {

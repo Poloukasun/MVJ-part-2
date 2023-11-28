@@ -1,182 +1,555 @@
-import {getCookie, ajaxRequest, log, viderContainer, partialRefresh, defilerBas} from "./functions.js";
+import { getCookie, ajaxRequest, viderContainer,partialRefresh } from "./functions.js";
+
 const userKey = getCookie("userKey");
-let friendKey='';
-let messages = [];
-let nbMessages = 0;
-let idMessage=0;
-let lastId = 0;
-let messagesInterval=0;
-let todelete= false;
-let edite = false;
+let friendKey = "";
+let nbMessages = null;
+let isChatAdmin = false;
+let messagesInterval = null;
+let infoGroupRecu = null;
+let precValSelect = null;
+let inGroups = false;
+let idGroup = null;
+
+$(".checkbox-list").hide();
 
 $(document).ready(() => {
+  
+  const ytbPattern = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)))([^"&?\/\s]{11})/i;
+  const imagePattern = /https?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*'(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\.(?:jpg|jpeg|gif|png|bmp|svg|webp)/gi;
 
-    function renderFriend (f) {
-        return `
-            <div userKey=${f.userKey} class="user"><img src=${f.profilePic ?? "./profil-default.jpg"}>${f.firstName}</div>
-        `;
+  function startPool (func) {
+    messagesInterval = partialRefresh(true, func, 1000, messagesInterval);
+  }
+
+  function endPool() {
+    partialRefresh(false, null, null, messagesInterval);
+  }
+
+  function elementExtractor(url) {
+    let match;
+
+    if (url.includes("youtube")) {
+      match = url.match(ytbPattern);
+      return [match ? match[1] : null, true];
     }
 
-    function chooseFriend() {
-        $('.user').click((e) => {
-            if(friendKey != $(e.target).attr('userKey')) {
-                friendKey = $(e.target).attr('userKey');
-                ajaxRequest("POST", "./server/change_friends.php", {friendKey:friendKey}, (friend) => {
-                    viderContainer("#chatArea");
-                    nbMessages=0;
-                    $('#chatArea').append(getChatHeader(friend));
-                    $("#chatArea").append(renderMessagesContainer());
-                    $("#chatArea").append(getMessageInputArea());
-                    getAllMessagesWith();
-                    getTheLastMessage();
-                    partialRefresh(false, null, null, messagesInterval);
-                    messagesInterval = partialRefresh(true, getTheLastMessage, 1000, messagesInterval);
-                    eventsOfSending();  
-                    // hoverMessage();
-                    $("#delete").click((e) => {
-                        idMessage = $(e.target).attr('idMessage');
-                        todelete=true;
-                    });
-                });
-            }
-        });
+    match = url.match(imagePattern);
+    return [match ? match[0] : null, false];
+  }
+
+  function getMsg(message) {
+    let res = elementExtractor(message);
+    let id = res[0];
+    let isVideo = res[1];
+
+    if (isVideo) {
+      return id
+        ? `<a style='text-decoration:none;' href="https://www.youtube.com/watch?v=${id}" target="_blank">
+            <img style='border-radius:20px;' src="https://img.youtube.com/vi/${id}/0.jpg" alt="Video" width=400 height=250>
+            </a>`
+        : null;
     }
+    return id ? `<img style='border-radius:20px' src="${id}" alt="Image" width=400 height=250>` : null;
+  }
+
+  function scrollToBottom(element) {
+    element.scrollTop = element.scrollHeight;
+  }
+
+  function renderGroups(groups) {
+    let div = document.createElement("div");
 
     
 
-    function getChatHeader(friend) {
-        return `
-                <div id="chatHeader"><img src=${friend.profilePic ?? "profil-default.jpg"}> ${friend.firstName} ${friend.lastName}</div>
-        `;
-    }
+    for (const k in groups) {
+      if (!Array.isArray(groups[k])) {
 
-    function renderFriends(friends) {
-        friends.forEach(f => {
-            $("#userList").append(renderFriend(f));
-        });
+        $(div).append(
+          `<img class='group' style='border-radius:50%; width:40; height:40;' src='../vladz/${groups[k].profilePic}'/>`
+        );
 
-        chooseFriend();
-    }
-
-    function getMessageInputArea () {
-        return `
-        <div id="messageInputArea">
-            <input id=message type="text" placeholder="Votre message...">
-            <button id="send">Envoyer</button>
-        </div> 
-        `;
-    }
-
-    function fillFriendsList() {
-        let friends = [];
-        ajaxRequest("GET", "./server/get_friends.php", {userKey:userKey}, (res) => {
-            friends = res;
-        });
+        div.setAttribute("class", "group user");
+        div.setAttribute("id", groups[k].idGroupChat);
+      
+      } else {
+        div = document.createElement("div");
+        div.setAttribute("class", "group user");
+        div.setAttribute('id', groups[k][0].idGroupChat);
         
-        if (friends.length>0) {
-            renderFriends(friends);
-        }
-    }
+        for (const g of groups[k]) {
+          $(div).append(
+            `<img class='group' style='border-radius:50%; width:40; height:40;' src='../vladz/${g.profilePic}'/>`
+            );
+          }
+          $(div).append(`<b>- ${groups[k][0].nom}</b>`);
+      }
 
-    function showMessage(m, showMy=false) {
+      $("#userList").append(div);
+    }
+  }
+
+  function renderFriend(f, groupe = false) {
+    if (!groupe) {
+      return `
+            <div userKey=${f.userKey} class="user"><img src=../vladz/${
+        f.profilePic ?? "./profil-default.jpg"
+      }>
+              ${f.firstName}
+            </div> `;
+    } else {
+      return `
+        <div id='${groupe.idGroupChat}' class="user"><img src=../vladz/${
+        groupe.profilePic ?? "./profil-default.jpg"
+      }>
+            ${groupe.nom}
+        </div>
+      `;
+    }
+  }
+
+  function setUpMessagesArea(e, isGroup=false) {
+    $("#chatArea").append(getChatHeader(e,isGroup));
+    $("#chatArea").append(renderMessagesContainer());
+    $("#chatArea").append(getMessageInputArea());
+  }
+
+  function chooseFriend() {
+    $(".user").click((e) => {
+      if (friendKey != $(e.target).attr("userKey")) {
+        friendKey = $(e.target).attr("userKey");
+        ajaxRequest( "POST", "./server/change_friends.php", { friendKey: friendKey }, (friend) => {
+            viderContainer("#chatArea");
+            nbMessages = null;
+            setUpMessagesArea(friend);
+            getAllMessagesWith();
+
+            endPool(getAllMessagesWith); 
+            startPool(getAllMessagesWith);
+            eventsOfSending();
+            let messagesContainer = document.querySelector("#chatMessages");
+            scrollToBottom(messagesContainer);
+          }
+        );
+      }
+    });
+  }
+
+  function getChatHeader(friend, isGroup = false) {
+    const img = isGroup
+      ? `<h3>${friend.nom}</h3>`
+      : `
+    <img src=../vladz/${friend.profilePic ?? "profil-default.jpg"}> ${
+          friend.firstName
+        } ${friend.lastName} 
+    `;
+
+    return `
+          <div id="chatHeader">
+            ${img}
+          </div>
+          `;
+  }
+
+  function renderFriends(friends) {
+    friends.forEach((f) => {
+      $("#userList").append(renderFriend(f));
+    });
+    chooseFriend();
+  }
+
+  function getMessageInputArea() {
+    return `
+    <div id="messageInputArea">
+      <input id=message type="text" placeholder="Votre message...">
+      <button id="send">Envoyer</button>
+    </div>`;
+  }
+
+  function getFriends() {
+    let friends = [];
+    ajaxRequest(
+      "GET",
+      "./server/get_friends.php",
+      { userKey: userKey },
+      (res) => {
+        friends = res;
+      }
+    );
+    return friends;
+  }
+
+  function userListFillHeader() {
+    viderContainer("#userList");
+    handleSelect();
+  }
+
+  function fillFriendsList() {
+    userListFillHeader();
+    let friends = getFriends();
+    if (friends.length > 0) {
+      renderFriends(friends);
+    }
+  }
+
+  function chatAreaReinitialiser() {
+    viderContainer("#chatArea");
+    $("#chatArea").append(`
+            <div class="no-friend-choosed">
+            <h3>Choisissez un ami pour partir une conversation</h3>
+      </div>
+    `);
+  }
+
+  function handleSelect() {
+    $("#friendsGroups").off().change(function () {
+        let val = $(this).val();
         
-        if(m.connectedUserId === m.idSender && showMy) {
-            $("#chatMessages").append(renderMessage("my-message", m));
-        } else if(m.connectedUserId !== m.idSender) {
-            $("#chatMessages").append(renderMessage("f-message", m));
+        if (precValSelect !== val) {
+          endPool();
+          chatAreaReinitialiser();
+          userListFillHeader();
+          
+          idGroup=null;
+          nbMessages=null;
+          
+          if (val === "f") {
+            fillFriendsList();
+            inGroups=false;
+          } else if (val === "g") {
+            getMyGroups();
+            chooseGroup();
+          
+            friendKey=null;
+            inGroups=true;
+          }
+          precValSelect=val;
         }
-    }
+    });
+  }
 
-    function renderMessages(msg) {
-        if(Array.isArray(msg)) {
-            viderContainer("#chatMessages");
-            msg.forEach((m) => {
-                showMessage(m, true)
-            });
-        } else {
-            showMessage(msg);
-        }
-         
-    }
+  function getGroupsMessages() {
+    ajaxRequest("POST", "./server/choose_group.php", { idGroup: idGroup, userKey: userKey, nbMessages:nbMessages, infoGroupRecu:infoGroupRecu }, (res) => {
 
-    function renderMessagesContainer () {
-        return `
-            <div id=chatMessages></div>
-        `;
-    }
+      let group=null;
+      let messages=null;
 
-    function renderMessage (classe, msg) {
-        return `
-            <div class="${classe} message" id=${msg.idMessage}> 
-                ${msg.content}
-                <i class="fa fa-pencil menu-button" aria-hidden="true" id="edit"></i>
-                <i class="fa fa-trash menu-button" aria-hidden="true" id="delete" ></i>
+      if(Array.isArray(res)) {
+        group = res[0];
+        messages = res[1];
+      } else {
+        group = res;
+      }
+
+      // info recue
+      infoGroupRecu = true;
+
+      if(group.idAdmin === group.connectedUserId) {
+        isChatAdmin=true;
+      } else {
+        isChatAdmin=false;
+      }
+      
+      viderContainer("#chatArea");
+      setUpMessagesArea(group,true);
+      
+      if(messages) {
+        renderMessages(messages);
+        nbMessages = messages.length;
+      }
+      eventsOfSending();
+    });
+  }
+
+  function chooseGroup() {
+    $(".group").click(function () {
+      let lastId = idGroup;
+      idGroup = parseInt($(this).attr("id"));
+    
+      if(lastId != idGroup) {
+        
+        infoGroupRecu = false;
+        nbMessages=null;
+        
+        endPool();
+        getGroupsMessages();
+        startPool(getGroupsMessages);
+        console.log(isChatAdmin);
+
+        lastId = idGroup;
+      }
+
+    });
+  }
+
+  function showMessage(m) {
+    
+    if (m.connectedUserId === m.idSender) {
+      $("#chatMessages").append(renderMessage("my-message", m, "#007bff" ,true));
+      hoverMessage();
+    } else if (m.connectedUserId !== m.idSender) {
+      $("#chatMessages").append(renderMessage("f-message", m));
+    }
+  
+  }
+
+  function renderMessages(msg) {
+    viderContainer("#chatMessages");
+    msg.forEach((m) => {
+      showMessage(m);
+    });
+  }
+
+  function renderMessagesContainer() {
+    return `
+            <div id=chatMessages>
             </div>
         `;
+  }
+
+  function deleteEditPermission (msg) {
+    return `
+        <i class="fa fa-pencil menu-button edit-button" aria-hidden="true" data-idmessage="${msg.idMessage}"></i>
+        <i class="fa fa-trash menu-button delete-button" aria-hidden="true" data-idmessage="${msg.idMessage}"></i> 
+    `;
+  }
+
+  function renderMessage(classe, msg, color="black", currentUser = false) {
+
+    const url = msg.type === "V" || msg.type === "P";
+    const adminEtGroupe = inGroups && isChatAdmin;
+    let choicesDiv=`<div style='display:none' class='choices' id='choices${msg.idMessage}'>`;
+
+    if(adminEtGroupe) {
+      if(currentUser) {
+        choicesDiv += deleteEditPermission(msg);
+      } else {
+        choicesDiv += `<i class="fa fa-trash menu-button delete-button" aria-hidden="true" data-idmessage="${msg.idMessage}"></i>`; 
+      }
+    } else if(currentUser) {
+      choicesDiv += deleteEditPermission(msg);
     }
 
-    function hoverMessage() {
-        $('.message')
-        .mouseover((e) => {
-            const id = $(e.target).closest('.message').attr('id');
-            
-        })
-        .mouseout((e) => {
-            console.log('out');
-            $('.container-menu').css('display', 'none');
+    choicesDiv += `</div>`;
 
+    return `
+          <div class="${classe} message" style=${url ? "background-color:white" : "background-color:${color}"} id="message_${msg.idMessage}"> 
+            ${msg.content}
+            ${choicesDiv}
+        </div>
+    `;
+  }
+
+  function hoverMessage() {
+    $(document)
+      .on("mouseover", ".message", function () {
+        $(this).find(".choices").css("display", "inline-block");
+        handleEditDelete();
+      })
+      .on("mouseout", ".message", function () {
+        $(this).find(".choices").css("display", "none");
+      });
+  }
+
+  function handleEditDelete() {
+    $(document).off("click", ".delete-button").on("click", ".delete-button", function () {
+        const id = $(this).data("idmessage");
+        const messageDiv = $(`#message_${id}`);
+        ajaxRequest("POST", "./server/delete_message.php", { idMessage: id, inGroups:inGroups }, (res) => {
+          if(res) {
+            messageDiv.remove();
+          }
         });
-        
+    });
+
+    $(document).off("click", ".edit-button").on("click", ".edit-button", function () {
+        const id = $(this).data("idmessage");
+        const messagerieDiv = $(`#message_${id}`);
+        const val = $(messagerieDiv).text().trim();
+        messagerieDiv.hide();
+        $("#chatMessages").append(renderInput(val, id));
+        saveEdit();
+    });
+  }
+
+  function saveEdit() {
+    $(".save-btn").click(function (e) {
+      const id = $(this).attr("id");
+      // ajaxRequest("POST", "./server/edit_msg.php", {idmsg:id, userKey:userKey, friendKey:friendKey, })
+    });
+  }
+
+  function renderInput(value, id) {
+    return `
+        <div class='edit-container' >
+            <input class='new-content message' type='text' id='newContent' idmessage='${id}' value='${value}'>
+            <i title='enregistrer' id='${id}' class="fa fa-check save-btn" aria-hidden="true"></i>
+        </div>
+        `;
+  }
+
+  function newMessage() {
+    const message = {};
+    message.content = $("#message").val();
+    message.senderKey = userKey;
+    if(!inGroups) {
+      message.friendKey = friendKey;
+    } else {
+      message.idGroupe = idGroup;
+    }
+    message.type = "M";
+    return message;
+  }
+
+  function getAllMessagesWith() {
+    ajaxRequest(
+      "POST",
+      "./server/get_messages_with_friend.php",
+      { userKey: userKey, friendKey: friendKey, last: nbMessages },
+      (res) => {
+        nbMessages = res.length;
+        let messagesContainer = document.querySelector("#chatMessages");
+        if (res.length > 0) {
+          scrollToBottom(messagesContainer);
+        } else {
+          console.log("Vous n'avez aucun message... Démarrez la conversation!");
+        }
+        renderMessages(res);
+      }
+    );
+  }
+
+  function send() {
+    const message = newMessage();
+
+    if (message.content.includes("https")) {
+      message.content = getMsg(message.content);
+      message.type = message.content.includes("youtube") ? "V" : "P";
     }
 
-    function newMessage() {
-        const message = {};
-        message.content = $("#message").val();
-        message.senderKey = userKey;
-        message.friendKey = friendKey;
-        message.type = 'M';
-        return message;
+    ajaxRequest("POST", "./server/add_message.php", { message: message, inGroups:inGroups }, (msg) => { 
+      $("#chatMessages").append(renderMessage("my-message", msg));
+      $("#message").val("");
+    });
+  }
+
+  function eventsOfSending() {
+    $("#send").click(() => {
+      send();
+    });
+
+    $("#message").keypress((e) => {
+      if (e.key === "Enter") send();
+    });
+  }
+
+  function renderCheckboxes() {
+    let friends = getFriends();
+
+    $(".checkbox-list").append(` 
+      <div class='gr-creation'>
+        <h3>Discutez à plusieurs !</h3>
+        <input type="text" id='groupName' placeholder='Nom du groupe'> 
+      </div>
+    `);
+
+    friends.forEach((f) => {
+      let friendDiv = $(`
+          <div class="checkbox-item" id=${f.idUser}>
+              <input class='check-friend' type="checkbox" id="${f.idUser}">
+              <label for="${f.userKey}">
+              <img src="../vladz/${f.profilePic}" alt="${f.firstName}">
+                  ${f.firstName} ${f.lastName}
+              </label>
+          </div>`);
+
+      $(".checkbox-list").append(friendDiv);
+    });
+
+    $(".checkbox-list").append(`
+            <div class="buttons">
+                    <button id='add-friends-btn' type="button">Créer</button>
+                    <button id='cancel-btn' type="button">Annuler</button>
+            </div>
+        `);
+
+    $(".checkbox-list").show();
+    addCancelCheckbox();
+  }
+
+  function getGroup() {
+    const group = {
+      nom: document.querySelector("#groupName").value
+    };
+    return group;
+  }
+
+  function removeElementByIdFromArray(liste,id) {
+    for(const i in liste) {
+      if(liste[i] === id) {
+        liste.splice(i, 1);
+        break;
+      }
     }
+    return liste;
+  }
 
-    function getAllMessagesWith() {
-        ajaxRequest("POST", "./server/get_messages_with_friend.php", {userKey:userKey, friendKey:friendKey, last:nbMessages}, (res) => {
-            nbMessages = messages.length;
-            messages = res;
-            if(messages.length>0) {
-                lastId = messages[messages.length-1].idMessage;
-                renderMessages(messages);
-            } else {
-                console.log("Vous n'avez aucun message... Démarrez la conversation!");
-            }
-        });
-    }
+  function addCancelCheckbox() {
+    const boutonAdd = $("#add-friends-btn");
+    let lstKeys = [];
 
-    function getTheLastMessage() {
-        ajaxRequest("POST", "./server/get_last_message.php", { userKey:userKey, friendKey:friendKey, lastId:lastId }, (lastMessage) => {
-            console.log(lastMessage);
-            lastId = lastMessage.idMessage;
-            renderMessages(lastMessage);
-        });
-    }
+    $("#cancel-btn").click(() => {
+      $(".checkbox-list").hide();
+      viderContainer(".checkbox-list");
+      $("#container").show();
+      $(".choice").show();
+    });
 
-    function send() {
-        const message = newMessage();
-        ajaxRequest("POST", "./server/add_message.php", {message:message}, (msg) => {
-            $('#chatMessages').append(renderMessage("my-message", msg));
-            $('#message').val('');
-        });    
-    }
+    $(".check-friend").change(function (e) {
+      let id = $(this).attr("id");
+      let isChecked = $(this).prop("checked");
 
-    function eventsOfSending() {
-        $("#send").click(() => {
-            send();
-        });
+      if (isChecked) {
+        lstKeys.push(id);
+      } else {
+        removeElementByIdFromArray(lstKeys, id);
+      }
+    });
 
-        $("#message").keypress((e) => {
-            if(e.key === 'Enter') 
-                send();
-        });
-    }
 
-    fillFriendsList();
+    boutonAdd.click(() => {
+      const group = getGroup();
+      group.lstKeys = lstKeys;
+
+      ajaxRequest("POST", "./server/create_chat_group.php", { group: group, userKey: userKey });
+    });
+  }
+
+  function createGroup() { // +
+    $("#create-group-btn").click((e) => {
+      $("#container").hide();
+      $(".choice").hide();
+      renderCheckboxes();
+      endPool();
+      chatAreaReinitialiser();      
+      friendKey="";
+    });
+  }
+
+  function getMyGroups() {
+    let myGroups = [];
+
+    ajaxRequest("POST", "./server/get_user_groups_chat.php", { userKey: userKey }, (res) => {
+        if (res) {
+          console.log(res);
+          myGroups = res;
+          renderGroups(myGroups);
+        }
+      }
+    );
+
+    return myGroups;
+  }
+
+  createGroup();
+  fillFriendsList();
 });

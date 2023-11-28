@@ -9,7 +9,7 @@ const Mamow = Kiet.getAttribute('idUser');
 document.addEventListener('DOMContentLoaded', () => {
   getProfilMember();
   getDemandeGroup();
-  
+
 
   let divGroup = document.getElementById('groupe');
   let divPub = document.getElementById('pub');
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let divAll = document.getElementById('all-Member');
   let spanMembre = document.getElementById('nbMembre');
   let spanDemande = document.getElementById('nbDemande');
-  
+
   renderMember(spanMembre);
   renderDemande(spanDemande);
 
@@ -34,32 +34,28 @@ document.addEventListener('DOMContentLoaded', () => {
   var boutonSupprimer = document.querySelector("#SupprimerGroupe");
   let idGroup = valeur.getAttribute("idGroup");
 
-  if(boutonSupprimer !== null){
+  if (boutonSupprimer !== null) {
     boutonSupprimer.addEventListener("click", function (e) {
 
-      ajaxRequest("POST", "./server/delete_group.php", {"idGroup": idGroup }, (data) => {
+      ajaxRequest("POST", "./server/delete_group.php", { "idGroup": idGroup }, (data) => {
         if (data) {
-          console.log(data);
           window.location = './groupe.php';
         }
       })
     });
   }
-  
+
 
   boutonQuitter.addEventListener("click", function (e) {
 
     ajaxRequest("POST", "./server/delete_member_group.php", { "userKey": userKey, "idGroup": idGroup }, (data) => {
       if (data) {
-        console.log(data);
         renderMember(spanMembre);
       }
     })
   });
   var boutonAll = document.querySelector("#All-Members");
-  console.log(boutonAll);
   boutonAll.addEventListener("click", function (e) {
-    console.log(idAdmin);
     ajaxRequest("POST", "./server/get_all_member_group.php", { "userKey": userKey, "idGroup": idGroup }, (data) => {
       divGroup.style.display = "none";
       divPub.style.display = "none";
@@ -69,92 +65,91 @@ document.addEventListener('DOMContentLoaded', () => {
       viderContainer('#all-Member');
       renderAlls(data);
 
-      let boutonExclure = document.getElementById('exclure-btn');
-      console.log(boutonExclure);
-      let divMembre = document.getElementById('bonhomme');
-      
-      if (data.length > 0) {
-        if(boutonExclure !== null)
-        {
-          let idUser = boutonExclure.getAttribute('iduser');
-          let idGroup = valeur.getAttribute("idGroup");
-          boutonExclure.addEventListener("click", function (e){
-            ajaxRequest("POST", "./server/exclure_member_group.php", { "idUser": idUser, "idGroup": idGroup }, (data) => {
-             if(data){
-                console.log(data);
-                divMembre.remove();
-                renderMember(spanMembre);
-              }
+      let divMembre = document.querySelectorAll('#bonhomme');
+
+      divMembre.forEach((d) => {
+        let boutonExclure = d.querySelector('#exclure-btn');
+        if (data.length > 0) {
+          if (boutonExclure !== null) {
+            let idUser = boutonExclure.getAttribute('iduser');
+            let idGroup = valeur.getAttribute("idGroup");
+            boutonExclure.addEventListener("click", function (e) {
+              ajaxRequest("POST", "./server/exclure_member_group.php", { "idUser": idUser, "idGroup": idGroup }, (data) => {
+                if (data) {
+                  d.remove();
+                  renderMember(spanMembre);
+                }
+              });
             });
-          });
+          }
         }
-        
-        
-      }
-      else {
-        $('#all-Member').text('Aucun membre outre vous');
+        else {
+          $('#all-Member').text('Aucun membre excepté vous');
+        }
+      });
+      console.log(divMembre);
+      if (divMembre.length == 0) {
+        $('#all-Member').text('Aucun membre excepté vous');
       }
     })
   });
-     
-  
 
   if (boutonDemande.style.display !== "none") {
-    let boutonAccept = document.getElementById('accept-btn');
-    let boutonRefuse = document.getElementById('reject-btn');
-    let DivDemand = document.getElementById('bonhomme');
-    if (boutonRefuse !== null) {
-      const idUser = boutonRefuse.getAttribute('iduser');
 
-      boutonAccept.addEventListener("click", function (e) {
+    let divDemand = document.querySelectorAll('#bonhomme');
 
-        ajaxRequest("POST", "./server/accept_member_demand.php", { "idUser": idUser, "idGroup": idGroup }, (data) => {
-          if (data) {
-            console.log(data);
-            DivDemand.remove();
-            renderMember(spanMembre);
-            renderDemande(spanDemande);
-          }
-        })
-      });
-      boutonRefuse.addEventListener("click", function (e) {
+    if (divDemand !== null) {
+      divDemand.forEach((d) => {
+        let btnAccept = d.querySelector("#accept-btn");;
+        let btnRefuse = d.querySelector('#reject-btn');
 
-        ajaxRequest("POST", "./server/reject_member_demand.php", { "idUser": idUser, "idGroup": idGroup }, (data) => {
-          if (data) {
-            console.log(data);
-            DivDemand.remove();
-            renderDemande(spanDemande);
-          }
-        })
+        if (btnRefuse !== null) {
+          const idUser = btnRefuse.getAttribute('iduser');
+
+          btnAccept.addEventListener("click", function (e) {
+            ajaxRequest("POST", "./server/accept_member_demand.php", { "idUser": idUser, "idGroup": idGroup }, (data) => {
+              if (data) {
+                d.remove();
+                renderMember(spanMembre);
+                renderDemande(spanDemande);
+              }
+            })
+          });
+
+          btnRefuse.addEventListener("click", function (e) {
+            ajaxRequest("POST", "./server/reject_member_demand.php", { "idUser": idUser, "idGroup": idGroup }, (data) => {
+              if (data) {
+                d.remove();
+                renderDemande(spanDemande);
+              }
+            })
+          });
+        }
       });
     }
   }
 
 
 });
-function renderMember(spanMembre){
+function renderMember(spanMembre) {
   let idGroup = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_nb_member.php", { 'idGroup': idGroup }, (data) => {
-    if(data)
-    {
+    if (data) {
       spanMembre.textContent = data.nbMember;
     }
   });
 }
-function renderDemande(spanDemande){
+function renderDemande(spanDemande) {
   let idGroup = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_nb_demande.php", { 'idGroup': idGroup }, (data) => {
-    if(data)
-    {
-      console.log(data);
-      if(data.nbMember == 0)
-      {
+    if (data) {
+      if (data.nbMember == 0) {
         spanDemande.textContent = "0";
       }
-      else{
+      else {
         spanDemande.textContent = data.nbMember;
       }
-      
+
     }
   });
 }
@@ -165,12 +160,11 @@ function renderAlls(users) {
 }
 function renderAll(user) {
   let message = "";
-  console.log(user.idUser);
-  if(Mamow == idAdmin){
+  if (Mamow == idAdmin) {
     message = `<button style="width: 80%;margin-bottom: 10px;margin-top: 0px;"class="refuser bouton-accepter" id="exclure-btn" idUser="${user.idUser}" action="reject">Exclure</button>`
   }
   return `<div id="bonhomme" class="gallery" userKey="${user.userKey}">
-  <a target="_blank" href="${user.profilePic}">
+  <a href="./profil.php?${user.userKey}">
     <img src="${user.profilePic}" width="600" height="400">
   </a>
   <div style="font-size:18px;" class="desc">${user.firstName} ${user.lastName}</div>

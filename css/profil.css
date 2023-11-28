@@ -119,10 +119,14 @@ hr {
     position: absolute;
     color: black;
     background-color: #f4f7f6;
-    border-radius: 10px;
+    border-radius: 10px 10px 0 0;
     padding: 10px;
     width: 100%;
     cursor: pointer;
+}
+
+.titre:hover {
+    text-decoration: underline;
 }
 
 .image-pub-profil>video {
