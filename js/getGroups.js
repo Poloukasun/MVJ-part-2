@@ -22,9 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
           bouton.innerHTML = "Demande envoyé";
         }
         else {
+          
           bouton.innerHTML = "Afficher le groupe";
           console.log($('.Bgroupe'));
           bouton.removeEventListener('click', this);
+
           bouton.addEventListener('click', function (e) {
             window.location = `./feed-group.php?${idGroup}`;
           });
