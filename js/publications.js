@@ -275,7 +275,7 @@ function renderFormComment(idPub) {
        <div class="comment-form">
             <input type="text" id="comment" placeholder="Écrivez un commentaire...">
             <button id=${idPub} class="comment-btn">
-            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            <i class="fa fa-paper-plane" id=${idPub} aria-hidden="true"></i>
             </button>
         </div>
     `;
@@ -368,6 +368,9 @@ function deleteCommentaire(idPub) {
     ajaxRequest("POST", "./server/delete_comment.php", { idComment: id, idPub: idPub }, (res) => {
       if (res) {
         $(divCommentaire).hide();
+        let nbComm = $('.publication[id="' + idPub + '"]').find('div.nb-comments');
+        let text = nbComm.text().split(' ');
+        nbComm.html((--text[0]) + " " + text[1]);
       }
     });
 
@@ -397,6 +400,9 @@ function addCommentaire() {
           $('.comments').append(renderComment(res));
           $('#comment').val('');
           deleteCommentaire(res.idPublication);
+          let nbComm = $('.publication[id="' + idPub + '"]').find('div.nb-comments');
+          let text = nbComm.text().split(' ');
+          nbComm.html((++text[0]) + " " + text[1]);
         }
       });
     } else {

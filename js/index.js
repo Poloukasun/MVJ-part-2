@@ -46,7 +46,7 @@ export function handlePubPic() {
         }
     }
 
-    $('i.cancel').click(() => {
+    $('i.cancel').off().click(() => {
         $('#choose-image').val(''); // remove file
         $('#choose-video').val(''); // remove file
         $(".file-choosed").empty().css('background-image', 'none').removeAttr('id'); // empty container / remove image / remove id=choosed

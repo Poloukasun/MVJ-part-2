@@ -20,12 +20,17 @@
     <i class="fa-solid fa-bars fa-2xl hamburger"></i>
     <div class="header-right">
         <div class="searchBar-container">
-            <form class="research-form" method="get">
-                <input class="input-search input-t" name="q" id="search" type="search" placeholder="Rechercher dans mvj..." />
-                <button class="search-btn" type="submit">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </form>
+            <?php if (str_contains((strtok($_SERVER["REQUEST_URI"], '?')), 'friends.php')) { ?>
+                <form class="research-form" method="get" action="friends.php">
+                <?php } else {
+                ?>
+                    <form class="research-form" method="get" action="index.php">
+                    <?php } ?>
+                    <input class="input-search input-t" name="q" id="search" type="search" placeholder="Rechercher dans mvj..." />
+                    <button class="search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    </form>
         </div>
         <div>&nbsp;</div>
         <a href="./friends.php" title="Amis"><i class="fa-solid fa-user-group"><i class="label"> amis</i></i></a>

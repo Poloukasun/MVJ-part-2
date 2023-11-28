@@ -11,6 +11,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
 
         if($connected_user && $friend) {
             $messages = MessagesDao::get_messages_with($connected_user, $friend);
+            
             if(sizeof($messages) !== $last_nb) {
                 echo json_encode($messages);
             } 
