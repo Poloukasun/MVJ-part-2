@@ -32,7 +32,7 @@ function render_email_body($user)
             <p style='font-size:16px; color:#666;'> En cliquant sur le bouton ci dessous, votre compte sera confirmé et vous serrez dirigé vers
             la page de connexion. </p>
             <br><br>
-            <button style='background-color:#007bff; color:#fff; padding:10px 20px; font-size:18px; border:none; border-radius:5px; cursor:pointer;'><a href='http://149.56.128.77/MVJ/server/confirmation.php?key=$key'>Confirmer mon compte</a></button>
+            <button style='background-color:#007bff; color:#fff; padding:10px 20px; font-size:18px; border:none; border-radius:5px; cursor:pointer;'><a href='http://mvj.bureau.blue/server/confirmation.php?key=$key'>Confirmer mon compte</a></button>
 
         </div>
     ";

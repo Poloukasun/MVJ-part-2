@@ -4,7 +4,7 @@ const userKey = getCookie("userKey");
 let usersAffiches = [];
 let hasFriends = false;
 let incrementLimit = true;
-let limit = 3;
+let limit = 10;
 let thisId;
 
 let intervalRequests = 0;

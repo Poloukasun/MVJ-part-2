@@ -174,7 +174,7 @@ div.publication>*:not(.comments) {
 }
 
 .img-profil {
-    background-image: url(http://149.56.128.77/jeanseb/profil-default.jpg);
+    background-image: url(http://149.56.128.77/profil-default.jpg);
     height: 40px;
     aspect-ratio: 1;
     background-size: contain;
