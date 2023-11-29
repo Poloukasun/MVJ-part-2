@@ -37,8 +37,8 @@ export const afficherNotification = (temps, message) => {
 };
 
 
-
 $(document).ready(() => {
+  
   const updateUser = () => {
     const newUser = {};
 
@@ -53,6 +53,7 @@ $(document).ready(() => {
     if (newUser.email === "") {
       newUser.email = $("#email").val();
     }
+    
     return newUser;
   };
   const changeDisplay = (tag, NewId, text, dis, c) => {

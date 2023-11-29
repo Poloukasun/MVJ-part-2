@@ -107,6 +107,20 @@ class MessagesDao extends AbstractDao {
 
         return $res->rowCount() > 0;
     }
+
+    public static function quit_group_chat($id_group, $id_user) {
+        $req = "Call quitGroupChat(?,?)";
+        $res = self::process($req, [$id_user, $id_group])[1];
+
+        return $res->rowCount() > 0;
+    }
+
+    public static function delete_chat_group($id_group, $id_admin) {
+        $req = "Call deleteChatGroup(?,?)";
+        $res = self::process($req, [$id_group, $id_admin])[1];
+
+        return $res->rowCount() > 0;
+    }
 }
 
 ?>

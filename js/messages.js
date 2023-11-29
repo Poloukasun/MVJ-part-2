@@ -109,6 +109,10 @@ $(document).ready(() => {
 
   function setUpMessagesArea(e, isGroup = false) {
     $("#chatArea").append(getChatHeader(e, isGroup));
+    if(isGroup) {
+      console.log('donne');
+      handleQuitRemoveChat();
+    }
     $("#chatArea").append(renderMessagesContainer());
     $("#chatArea").append(getMessageInputArea());
   }
@@ -118,7 +122,9 @@ $(document).ready(() => {
       if (friendKey != $(e.target).attr("userKey")) {
         friendKey = $(e.target).attr("userKey");
         ajaxRequest("POST", "./server/change_friends.php", { friendKey: friendKey }, (friend) => {
+          
           viderContainer("#chatArea");
+
           nbMessages = null;
           setUpMessagesArea(friend);
           getAllMessagesWith();
@@ -126,27 +132,68 @@ $(document).ready(() => {
           endPool(getAllMessagesWith);
           startPool(getAllMessagesWith);
           eventsOfSending();
+
           let messagesContainer = document.querySelector("#chatMessages");
           scrollToBottom(messagesContainer);
-        }
-        );
+
+        });
       }
     });
   }
 
   function getChatHeader(friend, isGroup = false) {
-    const img = isGroup
-      ? `<h3>${friend.nom}</h3>`
-      : `
-    <img src=${friend.profilePic ?? "profil-default.jpg"}> ${friend.firstName
-      } ${friend.lastName} 
-    `;
+    let symbole = '';
+    
+    if(isGroup) {
+      if(isChatAdmin) {
+        symbole = `<i class="fa fa-trash delete-chat group-btn-chat" aria-hidden="true" id='${friend.id}'></i>`;
+      } else {
+        symbole = `<i class="fa fa-sign-out quit-chat group-btn-chat" aria-hidden="true" id='${friend.id}'></i>`;
+      }
+    }
+
+    const img = isGroup ? `<h3>${friend.nom}</h3>`:`<img src=${friend.profilePic ?? "profil-default.jpg"}> ${friend.firstName} ${friend.lastName}`;
+
+  
 
     return `
-          <div id="chatHeader">
+          <div id="chatHeader" style='display:fles; justify-content:space-between;'>
             ${img}
+            ${symbole}
           </div>
           `;
+  }
+
+  function quitDeleteChatEvents () {
+    getMyGroups();    
+    chatAreaReinitialiser();  
+    chooseGroup();
+    idGroup=null;
+  }
+
+  function handleQuitRemoveChat() {
+    $('.quit-chat').click(function () {
+      let id = $(this).attr('id');
+      
+      ajaxRequest ("POST", "./server/quit_groupchat.php", {idGroup:id, userKey:userKey}, (res) => {
+        if(res) {
+          quitDeleteChatEvents();
+          endPool();
+        }
+      });
+    });
+
+    $(".delete-chat").click(function() {
+      let id = $(this).attr('id');
+      ajaxRequest ("POST", "./server/delete_chat_group.php", {idGroup:id, userKey:userKey}, (res) => {
+        if(res) {
+          quitDeleteChatEvents();
+          endPool();
+        }
+      });
+    });
+
+
   }
 
   function renderFriends(friends) {
@@ -260,35 +307,31 @@ $(document).ready(() => {
   }
 
   function chooseGroup() {
+
     $(".group").click(function () {
+
       let lastId = idGroup;
       idGroup = parseInt($(this).attr("id"));
-
+      
       if (lastId != idGroup) {
-
         infoGroupRecu = false;
         nbMessages = null;
-
         endPool();
         getGroupsMessages();
         startPool(getGroupsMessages);
-        console.log(isChatAdmin);
-
         lastId = idGroup;
       }
-
+    
     });
   }
 
   function showMessage(m) {
-
     if (m.connectedUserId === m.idSender) {
       $("#chatMessages").append(renderMessage("my-message", m, "#007bff", true));
       hoverMessage();
     } else if (m.connectedUserId !== m.idSender) {
       $("#chatMessages").append(renderMessage("f-message", m));
     }
-
   }
 
   function renderMessages(msg) {
@@ -307,7 +350,6 @@ $(document).ready(() => {
 
   function deleteEditPermission(msg) {
     return `
-        <i class="fa fa-pencil menu-button edit-button" aria-hidden="true" data-idmessage="${msg.idMessage}"></i>
         <i class="fa fa-trash menu-button delete-button" aria-hidden="true" data-idmessage="${msg.idMessage}"></i> 
     `;
   }
@@ -321,9 +363,7 @@ $(document).ready(() => {
     if (adminEtGroupe) {
       if (currentUser) {
         choicesDiv += deleteEditPermission(msg);
-      } else {
-        choicesDiv += `<i class="fa fa-trash menu-button delete-button" aria-hidden="true" data-idmessage="${msg.idMessage}"></i>`;
-      }
+      } 
     } else if (currentUser) {
       choicesDiv += deleteEditPermission(msg);
     }
@@ -359,31 +399,6 @@ $(document).ready(() => {
         }
       });
     });
-
-    $(document).off("click", ".edit-button").on("click", ".edit-button", function () {
-      const id = $(this).data("idmessage");
-      const messagerieDiv = $(`#message_${id}`);
-      const val = $(messagerieDiv).text().trim();
-      messagerieDiv.hide();
-      $("#chatMessages").append(renderInput(val, id));
-      saveEdit();
-    });
-  }
-
-  function saveEdit() {
-    $(".save-btn").click(function (e) {
-      const id = $(this).attr("id");
-      // ajaxRequest("POST", "./server/edit_msg.php", {idmsg:id, userKey:userKey, friendKey:friendKey, })
-    });
-  }
-
-  function renderInput(value, id) {
-    return `
-        <div class='edit-container' >
-            <input class='new-content message' type='text' id='newContent' idmessage='${id}' value='${value}'>
-            <i title='enregistrer' id='${id}' class="fa fa-check save-btn" aria-hidden="true"></i>
-        </div>
-        `;
   }
 
   function newMessage() {
@@ -492,15 +507,19 @@ $(document).ready(() => {
     return liste;
   }
 
+  function showMessangerPage() {
+    $(".checkbox-list").hide();
+    viderContainer(".checkbox-list");
+    $("#container").show();
+    $(".choice").show();
+  }
+
   function addCancelCheckbox() {
     const boutonAdd = $("#add-friends-btn");
     let lstKeys = [];
 
     $("#cancel-btn").click(() => {
-      $(".checkbox-list").hide();
-      viderContainer(".checkbox-list");
-      $("#container").show();
-      $(".choice").show();
+      showMessangerPage();
     });
 
     $(".check-friend").change(function (e) {
@@ -519,7 +538,16 @@ $(document).ready(() => {
       const group = getGroup();
       group.lstKeys = lstKeys;
 
-      ajaxRequest("POST", "./server/create_chat_group.php", { group: group, userKey: userKey });
+      if(group.nom) {
+        ajaxRequest("POST", "./server/create_chat_group.php", { group: group, userKey: userKey }, (res) => {
+          if(res) {
+            showMessangerPage();
+          }
+        });
+      } else {
+        alert('veuillez indiquer un nom de groupe');
+         
+      }
     });
   }
 
@@ -536,16 +564,16 @@ $(document).ready(() => {
 
   function getMyGroups() {
     let myGroups = [];
-
+    
     ajaxRequest("POST", "./server/get_user_groups_chat.php", { userKey: userKey }, (res) => {
       if (res) {
-        console.log(res);
         myGroups = res;
+        console.log(myGroups);
+        viderContainer("#userList");
         renderGroups(myGroups);
       }
-    }
-    );
-
+    });
+    
     return myGroups;
   }
 
