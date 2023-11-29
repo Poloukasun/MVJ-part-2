@@ -73,6 +73,7 @@
     justify-items: center;
     background-color: white;
     height: 100%;
+    min-height: 450px;
 }
 
 .nomGroupe {

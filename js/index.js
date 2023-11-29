@@ -13,6 +13,8 @@ export function handlePubPic() {
     });
 
     function changeFile(fileId, e) {
+
+
         let file = e.target.files[0];
         if (file) {
             $(".file-choosed").empty().attr("id", "choosed");
@@ -43,6 +45,8 @@ export function handlePubPic() {
                     });
                 }
             }
+            let container = document.querySelector(".container-feed-group");
+            container.scrollTop = container.scrollHeight;
         }
     }
 

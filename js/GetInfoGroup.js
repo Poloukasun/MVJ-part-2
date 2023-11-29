@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let spanMembre = document.getElementById('nbMembre');
 
   partialRefresh(true, renderDemande, 10000);
+  
   renderMember(spanMembre);
   renderDemande();
 
@@ -178,7 +179,7 @@ function renderAll(user) {
     <div style="background-image:url(${user.profilePic});width: 178px;background-size: cover;background-repeat: no-repeat;background-position: center;height: 260px;
 }"></div>
   </a>
-  <div style="font-size:18px;" class="desc">${user.firstName} ${user.lastName}</div>
+  <div style="font-size:15px;" class="desc">${user.firstName} ${user.lastName}</div>
   ${message}
 </div>`;
 }
