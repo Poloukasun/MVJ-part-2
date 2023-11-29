@@ -35,7 +35,7 @@
         <div>&nbsp;</div>
         <a href="./friends.php" title="Amis"><i class="fa-solid fa-user-group"><i class="label"> amis</i></i></a>
         <a href="./groupe.php" title="Groupes"><i class="fa-solid fa-people-group"><i class="label"> groupes</i></i></a>
-        <a href="./market.php" title="Market"><i class="fa-solid fa-store"><i class="label"> magasin</i></i></a>
+        <!-- <a href="./market.php" title="Market"><i class="fa-solid fa-store"><i class="label"> magasin</i></i></a> -->
         <a href="./messenger.php" title="Messagerie"><i class="fa-solid fa-message"><i class="label"> messagerie</i></i></a>
         <a href="./profil.php?<?= isset($_SESSION['userKey']) ? $_SESSION['userKey'] : '' ?>" title="Profil"><i class="fa-solid fa-user"><i class="label"> profil</i></i></a>
         <a href="./index.php?disconnect" title="Déconnexion"><i class="fa-solid fa-right-from-bracket"><i class="label"> deconnexion</i></i></a>

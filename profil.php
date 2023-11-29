@@ -75,7 +75,7 @@ require_once("./header.php");
 <body>
   <?php require_once("./header.php"); ?>
   <main>
-    <div class="profile-header">
+    <div class="profile-header" style="background-color: <?= isset($_COOKIE['couleur_background']) ? $_COOKIE['couleur_background'] : '' ?>">
       <div class="profile-image" style="background-image: url(<?= $user['profilePic'] ?>);">
       </div>
       <div class="profile-info">
@@ -88,7 +88,7 @@ require_once("./header.php");
           <span class="publications"><?= $nbPublication['nb_pub'] ?> publications</span> |
           <span class="friends"><?= $friend['nb_friend'] ?> amis</span>
         </div>
-        <div style="margin-top: 10px;font-size: 18px;color: #007bff;"><?= $user['bio'] ?></div>
+        <div class="bio"><?= $user['bio'] ?></div>
         <?php if ($connected_user && $idUserKey == $_SESSION['userKey']) : ?>
           <button id="voirEnregistrement" style="width: 150px;margin-top: 15px;"><i id="font" class="fas fa-bookmark"></i> Enregistrements</button>
         <?php endif; ?>
