@@ -120,7 +120,7 @@ $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
 
     </div>
     <!-- Affichage des groupes rejoin -->
-    <div style="display: grid; width:100%;">
+    <div style="display: grid; width:100%;overflow-y:scroll;">
       <div class="bigDiv" id="groupe">
         <div class="imageGeant" style="background-image: url(<?= $info['imageUrl'] ?>);"></div>
         <div class="nomGroupe"><?= $info['name'] ?></div>

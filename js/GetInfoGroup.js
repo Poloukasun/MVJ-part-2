@@ -10,10 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
   getProfilMember();
   getDemandeGroup();
 
-  partialRefresh(true, renderDemande, 10000);
   partialRefresh(true, getProfilMember, 10000);
   partialRefresh(true, getDemandeGroup, 10000);
+
+  Gestion();
+
+  let spanMembre = document.getElementById('nbMembre');
+
+  partialRefresh(true, renderDemande, 10000);
   
+  renderMember(spanMembre);
+  renderDemande();
+
+});
+function Gestion(){
   let divGroup = document.getElementById('groupe');
   let divPub = document.getElementById('pub');
   let divDemande = document.getElementById('demande');
@@ -21,8 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let spanMembre = document.getElementById('nbMembre');
   let spanDemande = document.getElementById('nbDemande');
 
-  renderMember(spanMembre);
-  renderDemande(spanDemande);
+  
   
 
   let boutonDemande = document.getElementById('btnDemande');
@@ -92,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
           $('#all-Member').text('Aucun membre excepté vous');
         }
       });
-      console.log(divMembre);
       if (divMembre.length == 0) {
         $('#all-Member').text('Aucun membre excepté vous');
       }
@@ -132,8 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
- 
-});
+}
 function renderMember(spanMembre) {
   let idGroup = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_nb_member.php", { 'idGroup': idGroup }, (data) => {
@@ -142,7 +149,8 @@ function renderMember(spanMembre) {
     }
   });
 }
-function renderDemande(spanDemande) {
+function renderDemande() {
+  let spanDemande = document.getElementById('nbDemande');
   let idGroup = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_nb_demande.php", { 'idGroup': idGroup }, (data) => {
     if (data) {
@@ -152,7 +160,7 @@ function renderDemande(spanDemande) {
       else {
         spanDemande.textContent = data.nbMember;
       }
-
+      Gestion();
     }
   });
 }
@@ -171,7 +179,7 @@ function renderAll(user) {
     <div style="background-image:url(${user.profilePic});width: 178px;background-size: cover;background-repeat: no-repeat;background-position: center;height: 260px;
 }"></div>
   </a>
-  <div style="font-size:18px;" class="desc">${user.firstName} ${user.lastName}</div>
+  <div style="font-size:15px;" class="desc">${user.firstName} ${user.lastName}</div>
   ${message}
 </div>`;
 }
@@ -180,6 +188,7 @@ function getProfilMember() {
   ajaxRequest("POST", "./server/get_Members_group.php", { 'idGroup': idGroup1 }, (data) => {
     viderContainer('.image-container');
     renderProfilePics(data);
+    Gestion();
   });
 }
 function renderProfilePics(users) {
@@ -196,6 +205,7 @@ function getDemandeGroup() {
     if (data.length > 0) {
       viderContainer('#demande');
       renderDemands(data);
+      Gestion();
     }
     else {
       $('#demande').text('Aucune demande');

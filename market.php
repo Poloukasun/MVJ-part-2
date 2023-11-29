@@ -57,7 +57,7 @@ if ($user['profilePic'] == null) {
     <div class="friends-container" style="padding: 20px;">
       <h2>Marché MVJ <i title="Tout rafraichir" id="refresh-all" class="fa fa-refresh" aria-hidden="true"></i></h2>
       <span style="font-weight: bold;font-size: 20px;margin-bottom: 5px;">Résultats de la recherche</span>
-      <input type="search" style="border: 0.5px solid gray;width: 100%;height: 4%;background-color: #e7e7e7;color: black;" placeholder="Rechercher dans Kolon">
+      <input type="search" style="border: 0.5px solid gray;width: 100%;height: 4%;background-color: #e7e7e7;color: black;" placeholder="Rechercher dans MVJ">
       <hr style="width: 100%;">
       <a href=""><button class="acceuil">
           <i class="fas fa-plus"></i> Ajouter un article</button></a>
