@@ -13,8 +13,6 @@ export function handlePubPic() {
     });
 
     function changeFile(fileId, e) {
-
-
         let file = e.target.files[0];
         if (file) {
             $(".file-choosed").empty().attr("id", "choosed");
@@ -26,11 +24,14 @@ export function handlePubPic() {
                 let reader = new FileReader();
                 reader.onload = ((e) => {
                     $(".file-choosed").css('background-image', 'url(' + e.target.result + ')');
+                    $(".file-choosed").css('height', '');
                 });
                 reader.readAsDataURL(file);
             } else if (inputName == "video") {
                 let fileUrl = URL.createObjectURL(file);
                 if (fileUrl) {
+                    $(".file-choosed").css('background-image', 'none');
+                    $(".file-choosed").css('height', 'fit-content');
                     $(".file-choosed").append(`
                     <video width="90%" controls loop webkit-playsinline playsinline>
                         <source src="${fileUrl}">
