@@ -164,6 +164,8 @@ div.gallery {
     height: fit-content;
 }
 
+
+
 div.gallery:hover {
     border: 1px solid #777;
 }
