@@ -307,6 +307,8 @@ function publish() {
       file = $("#choose-video").prop("files")[0];
       isImage = 0;
     }
+    console.log("dsafda");
+    console.log(file);
     const desc = $("#thought").val();
 
     if (file && desc.trim()) {
