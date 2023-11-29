@@ -10,19 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
   getProfilMember();
   getDemandeGroup();
 
+  partialRefresh(true, renderDemande, 10000);
   partialRefresh(true, getProfilMember, 10000);
   partialRefresh(true, getDemandeGroup, 10000);
-
-  Gestion();
-
-  let spanMembre = document.getElementById('nbMembre');
-
-  partialRefresh(true, renderDemande, 10000);
-  renderMember(spanMembre);
-  renderDemande();
-
-});
-function Gestion(){
+  
   let divGroup = document.getElementById('groupe');
   let divPub = document.getElementById('pub');
   let divDemande = document.getElementById('demande');
@@ -30,7 +21,8 @@ function Gestion(){
   let spanMembre = document.getElementById('nbMembre');
   let spanDemande = document.getElementById('nbDemande');
 
-  
+  renderMember(spanMembre);
+  renderDemande(spanDemande);
   
 
   let boutonDemande = document.getElementById('btnDemande');
@@ -139,7 +131,8 @@ function Gestion(){
       });
     }
   }
-}
+ 
+});
 function renderMember(spanMembre) {
   let idGroup = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_nb_member.php", { 'idGroup': idGroup }, (data) => {
