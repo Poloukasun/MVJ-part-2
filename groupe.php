@@ -10,7 +10,6 @@ if (!is_logged())
   header("Location:login_register.php");
 
 else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
-
 ?>
 
 <!DOCTYPE html>

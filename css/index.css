@@ -387,7 +387,7 @@ hr {
 
 .file-choosed#choosed {
     width: auto !important;
-    height: 300px;
+    height: fit-content;
 }
 
 .file-label {
