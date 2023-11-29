@@ -1,4 +1,4 @@
-import { getCookie, ajaxRequest, viderContainer,partialRefresh } from "./functions.js";
+import { getCookie, ajaxRequest, viderContainer, partialRefresh } from "./functions.js";
 
 const userKey = getCookie("userKey");
 let friendKey = "";
@@ -13,11 +13,13 @@ let idGroup = null;
 $(".checkbox-list").hide();
 
 $(document).ready(() => {
-  
+
+  // chatgpt
   const ytbPattern = /(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)))([^"&?\/\s]{11})/i;
   const imagePattern = /https?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*'(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\.(?:jpg|jpeg|gif|png|bmp|svg|webp)/gi;
+  // 
 
-  function startPool (func) {
+  function startPool(func) {
     messagesInterval = partialRefresh(true, func, 1000, messagesInterval);
   }
 
@@ -27,7 +29,7 @@ $(document).ready(() => {
 
   function elementExtractor(url) {
     let match;
-
+    
     if (url.includes("youtube")) {
       match = url.match(ytbPattern);
       return [match ? match[1] : null, true];
@@ -59,31 +61,28 @@ $(document).ready(() => {
   function renderGroups(groups) {
     let div = document.createElement("div");
 
-    
-
     for (const k in groups) {
       if (!Array.isArray(groups[k])) {
-
+        
         $(div).append(
-          `<img class='group' style='border-radius:50%; width:40; height:40;' src='../vladz/${groups[k].profilePic}'/>`
+          `<img class='group' title="${groups[k].firstName + " " + groups[k].lastName}" style='border-radius:50%; width:40; height:40;' src='${groups[k].profilePic}'/>`
         );
 
         div.setAttribute("class", "group user");
         div.setAttribute("id", groups[k].idGroupChat);
-      
+
       } else {
         div = document.createElement("div");
         div.setAttribute("class", "group user");
         div.setAttribute('id', groups[k][0].idGroupChat);
-        
+
         for (const g of groups[k]) {
           $(div).append(
-            `<img class='group' style='border-radius:50%; width:40; height:40;' src='../vladz/${g.profilePic}'/>`
-            );
-          }
-          $(div).append(`<b>- ${groups[k][0].nom}</b>`);
+            `<img class='group' title="${g.firstName + " " + g.lastName}" style='border-radius:50%; width:40; height:40;' src='${g.profilePic}'/>`
+          );
+        }
+        $(div).append(`<b>- ${groups[k][0].nom}</b>`);
       }
-
       $("#userList").append(div);
     }
   }
@@ -91,24 +90,25 @@ $(document).ready(() => {
   function renderFriend(f, groupe = false) {
     if (!groupe) {
       return `
-            <div userKey=${f.userKey} class="user"><img src=../vladz/${
-        f.profilePic ?? "./profil-default.jpg"
-      }>
-              ${f.firstName}
-            </div> `;
+            <div userKey=${f.userKey} title="${f.firstName + " " + f.lastName}" class="user"><img src=${f.profilePic ?? "./profil-default.jpg"
+        }> ${f.firstName} </div> `;
     } else {
       return `
-        <div id='${groupe.idGroupChat}' class="user"><img src=../vladz/${
-        groupe.profilePic ?? "./profil-default.jpg"
-      }>
+        <div id='${groupe.idGroupChat}' class="user"><img src=${groupe.profilePic ?? "./profil-default.jpg"
+        }>
             ${groupe.nom}
         </div>
       `;
     }
   }
 
-  function setUpMessagesArea(e, isGroup=false) {
-    $("#chatArea").append(getChatHeader(e,isGroup));
+  function setUpMessagesArea(e, isGroup = false) {
+    $("#chatArea").append(getChatHeader(e, isGroup));
+    
+    if(isGroup) {
+      handleQuitDeleteChat();
+    }
+
     $("#chatArea").append(renderMessagesContainer());
     $("#chatArea").append(getMessageInputArea());
   }
@@ -117,35 +117,65 @@ $(document).ready(() => {
     $(".user").click((e) => {
       if (friendKey != $(e.target).attr("userKey")) {
         friendKey = $(e.target).attr("userKey");
-        ajaxRequest( "POST", "./server/change_friends.php", { friendKey: friendKey }, (friend) => {
-            viderContainer("#chatArea");
-            nbMessages = null;
-            setUpMessagesArea(friend);
-            getAllMessagesWith();
+        ajaxRequest("POST", "./server/change_friends.php", { friendKey: friendKey }, (friend) => {
+          viderContainer("#chatArea");
+          
+          nbMessages = null;
 
-            endPool(getAllMessagesWith); 
-            startPool(getAllMessagesWith);
-            eventsOfSending();
-            let messagesContainer = document.querySelector("#chatMessages");
-            scrollToBottom(messagesContainer);
-          }
+          setUpMessagesArea(friend);
+          getAllMessagesWith();
+
+          endPool(getAllMessagesWith);
+          startPool(getAllMessagesWith);
+
+          eventsOfSending();
+
+          let messagesContainer = document.querySelector("#chatMessages");
+          scrollToBottom(messagesContainer);
+        }
         );
       }
     });
   }
 
+  function handleQuitDeleteChat() {
+    $(".quit-chat").click(function () {
+      const idGroup = $(this).attr('id');
+      chatAreaReinitialiser();
+      getMyGroups();
+      chooseGroup();
+      idGroup=null;
+    });
+  }
+
   function getChatHeader(friend, isGroup = false) {
+    let symbole = '';
+
+    if(isGroup) {
+      console.log('dans if de isGroup')
+      if(!isChatAdmin) {
+        console.log('pas admin, donc peut quitter');
+        symbole = `<i class="fa fa-sign-out group-btn-chat quit-chat" title='quitter le groupe' aria-hidden="true" id='${friend.id}'></i>`;
+      } else {
+        console.log('dans le else');
+        symbole = `<i class="fa fa-trash delete-chat group-btn-chat" aria-hidden="true" id='${friend.id}'></i> `;
+      }
+    }
+
+
     const img = isGroup
       ? `<h3>${friend.nom}</h3>`
       : `
-    <img src=../vladz/${friend.profilePic ?? "profil-default.jpg"}> ${
-          friend.firstName
-        } ${friend.lastName} 
+    <img src=${friend.profilePic ?? "profil-default.jpg"}> ${friend.firstName
+      } ${friend.lastName}
     `;
 
+    
+
     return `
-          <div id="chatHeader">
+          <div id="chatHeader" style='display:flex; justify-content:space-between;'>
             ${img}
+            ${symbole}
           </div>
           `;
   }
@@ -167,14 +197,9 @@ $(document).ready(() => {
 
   function getFriends() {
     let friends = [];
-    ajaxRequest(
-      "GET",
-      "./server/get_friends.php",
-      { userKey: userKey },
-      (res) => {
-        friends = res;
-      }
-    );
+    ajaxRequest("GET", "./server/get_friends.php", { userKey: userKey }, (res) => {
+      friends = res;
+    });
     return friends;
   }
 
@@ -202,38 +227,41 @@ $(document).ready(() => {
 
   function handleSelect() {
     $("#friendsGroups").off().change(function () {
-        let val = $(this).val();
+      let val = $(this).val();
+
+      if (precValSelect !== val) {
+        endPool();
+        chatAreaReinitialiser();
+        userListFillHeader();
+
+        idGroup = null;
+        nbMessages = null;
+
+        if (val === "f") {
         
-        if (precValSelect !== val) {
-          endPool();
-          chatAreaReinitialiser();
-          userListFillHeader();
-          
-          idGroup=null;
-          nbMessages=null;
-          
-          if (val === "f") {
-            fillFriendsList();
-            inGroups=false;
-          } else if (val === "g") {
-            getMyGroups();
-            chooseGroup();
-          
-            friendKey=null;
-            inGroups=true;
-          }
-          precValSelect=val;
+          fillFriendsList();
+          inGroups = false;
+        
+        } else if (val === "g") {
+
+          getMyGroups();
+          chooseGroup();
+
+          friendKey = null;
+          inGroups = true;
         }
+        precValSelect = val;
+      }
     });
   }
 
   function getGroupsMessages() {
-    ajaxRequest("POST", "./server/choose_group.php", { idGroup: idGroup, userKey: userKey, nbMessages:nbMessages, infoGroupRecu:infoGroupRecu }, (res) => {
+    ajaxRequest("POST", "./server/choose_group.php", { idGroup: idGroup, userKey: userKey, nbMessages: nbMessages, infoGroupRecu: infoGroupRecu }, (res) => {
 
-      let group=null;
-      let messages=null;
+      let group = null;
+      let messages = null;
 
-      if(Array.isArray(res)) {
+      if (Array.isArray(res)) {
         group = res[0];
         messages = res[1];
       } else {
@@ -243,16 +271,16 @@ $(document).ready(() => {
       // info recue
       infoGroupRecu = true;
 
-      if(group.idAdmin === group.connectedUserId) {
-        isChatAdmin=true;
+      if (group.idAdmin === group.connectedUserId) {
+        isChatAdmin = true;
       } else {
-        isChatAdmin=false;
+        isChatAdmin = false;
       }
-      
+
       viderContainer("#chatArea");
-      setUpMessagesArea(group,true);
-      
-      if(messages) {
+      setUpMessagesArea(group, true);
+
+      if (messages) {
         renderMessages(messages);
         nbMessages = messages.length;
       }
@@ -264,12 +292,12 @@ $(document).ready(() => {
     $(".group").click(function () {
       let lastId = idGroup;
       idGroup = parseInt($(this).attr("id"));
-    
-      if(lastId != idGroup) {
-        
+      console.log(idGroup);
+      if (lastId != idGroup) {
+
         infoGroupRecu = false;
-        nbMessages=null;
-        
+        nbMessages = null;
+
         endPool();
         getGroupsMessages();
         startPool(getGroupsMessages);
@@ -282,14 +310,14 @@ $(document).ready(() => {
   }
 
   function showMessage(m) {
-    
+
     if (m.connectedUserId === m.idSender) {
-      $("#chatMessages").append(renderMessage("my-message", m, "#007bff" ,true));
+      $("#chatMessages").append(renderMessage("my-message", m, "#007bff", true));
       hoverMessage();
     } else if (m.connectedUserId !== m.idSender) {
       $("#chatMessages").append(renderMessage("f-message", m));
     }
-  
+
   }
 
   function renderMessages(msg) {
@@ -306,26 +334,23 @@ $(document).ready(() => {
         `;
   }
 
-  function deleteEditPermission (msg) {
+  function deleteEditPermission(msg) {
     return `
-        <i class="fa fa-pencil menu-button edit-button" aria-hidden="true" data-idmessage="${msg.idMessage}"></i>
         <i class="fa fa-trash menu-button delete-button" aria-hidden="true" data-idmessage="${msg.idMessage}"></i> 
     `;
   }
 
-  function renderMessage(classe, msg, color="black", currentUser = false) {
+  function renderMessage(classe, msg, color = "black", currentUser = false) {
 
     const url = msg.type === "V" || msg.type === "P";
     const adminEtGroupe = inGroups && isChatAdmin;
-    let choicesDiv=`<div style='display:none' class='choices' id='choices${msg.idMessage}'>`;
+    let choicesDiv = `<div style='display:none' class='choices' id='choices${msg.idMessage}'>`;
 
-    if(adminEtGroupe) {
-      if(currentUser) {
+    if (adminEtGroupe) {
+      if (currentUser) {
         choicesDiv += deleteEditPermission(msg);
-      } else {
-        choicesDiv += `<i class="fa fa-trash menu-button delete-button" aria-hidden="true" data-idmessage="${msg.idMessage}"></i>`; 
-      }
-    } else if(currentUser) {
+      } 
+    } else if (currentUser) {
       choicesDiv += deleteEditPermission(msg);
     }
 
@@ -352,46 +377,23 @@ $(document).ready(() => {
 
   function handleEditDelete() {
     $(document).off("click", ".delete-button").on("click", ".delete-button", function () {
-        const id = $(this).data("idmessage");
-        const messageDiv = $(`#message_${id}`);
-        ajaxRequest("POST", "./server/delete_message.php", { idMessage: id, inGroups:inGroups }, (res) => {
-          if(res) {
-            messageDiv.remove();
-          }
-        });
-    });
 
-    $(document).off("click", ".edit-button").on("click", ".edit-button", function () {
-        const id = $(this).data("idmessage");
-        const messagerieDiv = $(`#message_${id}`);
-        const val = $(messagerieDiv).text().trim();
-        messagerieDiv.hide();
-        $("#chatMessages").append(renderInput(val, id));
-        saveEdit();
-    });
-  }
+      const id = $(this).data("idmessage");
+      const messageDiv = $(`#message_${id}`);
 
-  function saveEdit() {
-    $(".save-btn").click(function (e) {
-      const id = $(this).attr("id");
-      // ajaxRequest("POST", "./server/edit_msg.php", {idmsg:id, userKey:userKey, friendKey:friendKey, })
+      ajaxRequest("POST", "./server/delete_message.php", { idMessage: id, inGroups: inGroups }, (res) => {
+        if (res) {
+          messageDiv.remove();
+        }
+      });
     });
-  }
-
-  function renderInput(value, id) {
-    return `
-        <div class='edit-container' >
-            <input class='new-content message' type='text' id='newContent' idmessage='${id}' value='${value}'>
-            <i title='enregistrer' id='${id}' class="fa fa-check save-btn" aria-hidden="true"></i>
-        </div>
-        `;
   }
 
   function newMessage() {
     const message = {};
     message.content = $("#message").val();
     message.senderKey = userKey;
-    if(!inGroups) {
+    if (!inGroups) {
       message.friendKey = friendKey;
     } else {
       message.idGroupe = idGroup;
@@ -426,7 +428,7 @@ $(document).ready(() => {
       message.type = message.content.includes("youtube") ? "V" : "P";
     }
 
-    ajaxRequest("POST", "./server/add_message.php", { message: message, inGroups:inGroups }, (msg) => { 
+    ajaxRequest("POST", "./server/add_message.php", { message: message, inGroups: inGroups }, (msg) => {
       $("#chatMessages").append(renderMessage("my-message", msg));
       $("#message").val("");
     });
@@ -453,11 +455,12 @@ $(document).ready(() => {
     `);
 
     friends.forEach((f) => {
+      console.log(f.profilePic);
       let friendDiv = $(`
           <div class="checkbox-item" id=${f.idUser}>
               <input class='check-friend' type="checkbox" id="${f.idUser}">
               <label for="${f.userKey}">
-              <img src="../vladz/${f.profilePic}" alt="${f.firstName}">
+              <img src="${f.profilePic}" alt="${f.firstName}">
                   ${f.firstName} ${f.lastName}
               </label>
           </div>`);
@@ -470,7 +473,7 @@ $(document).ready(() => {
                     <button id='add-friends-btn' type="button">Créer</button>
                     <button id='cancel-btn' type="button">Annuler</button>
             </div>
-        `);
+    `);
 
     $(".checkbox-list").show();
     addCancelCheckbox();
@@ -483,9 +486,9 @@ $(document).ready(() => {
     return group;
   }
 
-  function removeElementByIdFromArray(liste,id) {
-    for(const i in liste) {
-      if(liste[i] === id) {
+  function removeElementByIdFromArray(liste, id) {
+    for (const i in liste) {
+      if (liste[i] === id) {
         liste.splice(i, 1);
         break;
       }
@@ -530,8 +533,8 @@ $(document).ready(() => {
       $(".choice").hide();
       renderCheckboxes();
       endPool();
-      chatAreaReinitialiser();      
-      friendKey="";
+      chatAreaReinitialiser();
+      friendKey = "";
     });
   }
 
@@ -539,12 +542,13 @@ $(document).ready(() => {
     let myGroups = [];
 
     ajaxRequest("POST", "./server/get_user_groups_chat.php", { userKey: userKey }, (res) => {
-        if (res) {
-          console.log(res);
-          myGroups = res;
-          renderGroups(myGroups);
-        }
+      if (res) {
+        console.log(res);
+        viderContainer("#userList");
+        myGroups = res;
+        renderGroups(myGroups);
       }
+    }
     );
 
     return myGroups;

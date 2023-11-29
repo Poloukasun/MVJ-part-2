@@ -1,4 +1,4 @@
-import { ajaxRequest, getCookie, viderContainer } from "./functions.js";
+import { ajaxRequest, getCookie, viderContainer, partialRefresh } from "./functions.js";
 
 const valeur = document.querySelector('#idGroup');
 const userKey = getCookie('userKey');
@@ -10,7 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
   getProfilMember();
   getDemandeGroup();
 
+  partialRefresh(true, getProfilMember, 10000);
+  partialRefresh(true, getDemandeGroup, 10000);
 
+  Gestion();
+
+  let spanMembre = document.getElementById('nbMembre');
+
+  partialRefresh(true, renderDemande, 10000);
+  renderMember(spanMembre);
+  renderDemande();
+
+});
+function Gestion(){
   let divGroup = document.getElementById('groupe');
   let divPub = document.getElementById('pub');
   let divDemande = document.getElementById('demande');
@@ -18,8 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let spanMembre = document.getElementById('nbMembre');
   let spanDemande = document.getElementById('nbDemande');
 
-  renderMember(spanMembre);
-  renderDemande(spanDemande);
+  
+  
 
   let boutonDemande = document.getElementById('btnDemande');
 
@@ -55,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   });
   var boutonAll = document.querySelector("#All-Members");
+  
   boutonAll.addEventListener("click", function (e) {
     ajaxRequest("POST", "./server/get_all_member_group.php", { "userKey": userKey, "idGroup": idGroup }, (data) => {
       divGroup.style.display = "none";
@@ -87,13 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
           $('#all-Member').text('Aucun membre excepté vous');
         }
       });
-      console.log(divMembre);
       if (divMembre.length == 0) {
         $('#all-Member').text('Aucun membre excepté vous');
       }
     })
   });
-
   if (boutonDemande.style.display !== "none") {
 
     let divDemand = document.querySelectorAll('#bonhomme');
@@ -128,9 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
-
-
-});
+}
 function renderMember(spanMembre) {
   let idGroup = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_nb_member.php", { 'idGroup': idGroup }, (data) => {
@@ -139,7 +148,8 @@ function renderMember(spanMembre) {
     }
   });
 }
-function renderDemande(spanDemande) {
+function renderDemande() {
+  let spanDemande = document.getElementById('nbDemande');
   let idGroup = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_nb_demande.php", { 'idGroup': idGroup }, (data) => {
     if (data) {
@@ -149,7 +159,7 @@ function renderDemande(spanDemande) {
       else {
         spanDemande.textContent = data.nbMember;
       }
-
+      Gestion();
     }
   });
 }
@@ -165,7 +175,8 @@ function renderAll(user) {
   }
   return `<div id="bonhomme" class="gallery" userKey="${user.userKey}">
   <a href="./profil.php?${user.userKey}">
-    <img src="${user.profilePic}" width="600" height="400">
+    <div style="background-image:url(${user.profilePic});width: 178px;background-size: cover;background-repeat: no-repeat;background-position: center;height: 260px;
+}"></div>
   </a>
   <div style="font-size:18px;" class="desc">${user.firstName} ${user.lastName}</div>
   ${message}
@@ -174,7 +185,9 @@ function renderAll(user) {
 function getProfilMember() {
   const idGroup1 = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_Members_group.php", { 'idGroup': idGroup1 }, (data) => {
+    viderContainer('.image-container');
     renderProfilePics(data);
+    Gestion();
   });
 }
 function renderProfilePics(users) {
@@ -189,7 +202,9 @@ function getDemandeGroup() {
   const idGroup1 = valeur.getAttribute("idGroup");
   ajaxRequest("POST", "./server/get_demande_group.php", { 'idGroup': idGroup1 }, (data) => {
     if (data.length > 0) {
+      viderContainer('#demande');
       renderDemands(data);
+      Gestion();
     }
     else {
       $('#demande').text('Aucune demande');
@@ -205,7 +220,8 @@ function renderDemand(user) {
   return `
 <div id="bonhomme" class="gallery" userKey="${user.userKey}">
   <a target="_blank" href="${user.profilePic}">
-    <img src="${user.profilePic}" width="600" height="400">
+  <div style="background-image:url(${user.profilePic});width: 178px;background-size: cover;background-repeat: no-repeat;background-position: center;height: 260px;
+}"></div>
   </a>
   <div class="desc" style="font-size:18px;">${user.firstName} ${user.lastName}</div>
   <button class="bouton-accepter" id="accept-btn" idUser="${user.idUser}" action="accept">Accepter</button>

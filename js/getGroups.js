@@ -1,4 +1,4 @@
-import { ajaxRequest, getCookie } from "./functions.js";
+import { ajaxRequest, getCookie, partialRefresh, viderContainer } from "./functions.js";
 
 const userKey = getCookie('userKey');
 
@@ -6,46 +6,68 @@ const userKey = getCookie('userKey');
 document.addEventListener('DOMContentLoaded', () => {
   getYourGroup();
   getGroup();
+  rejoindreGroupe();
 
-  var boutons = document.querySelectorAll(".Bgroupe");
 
   // Parcourez tous les boutons pour ajouter un écouteur de clic à chacun
-  boutons.forEach(function (bouton) {
-    bouton.addEventListener("click", function (e) {
-      //const parent = $(e.target).parent().parent();
-      const isPrivate = bouton.getAttribute("isPrivate");
-      const idGroup = bouton.getAttribute("groupKey");
-      if (isPrivate == 1) {
-        bouton.innerHTML = "Demande envoyé";
-      }
-      else {
-        bouton.innerHTML = "Afficher le groupe";
-        console.log($('.Bgroupe'));
-        bouton.removeEventListener('click', this);
-        bouton.addEventListener('click', function (e) {
-          window.location = `./feed-group.php?${idGroup}`;
-        });
+  function rejoindreGroupe () {
+    var boutons = document.querySelectorAll(".Bgroupe");
 
-      }
-      const value = { "idGroup": idGroup, "isPrivate": isPrivate, "userKey": userKey };
-      // console.log(value);
-      // console.log(parent);
-      ajaxRequest("POST", "./server/join_group.php", value, (data) => {
-        if (data) {
-          // console.log(data);
+    boutons.forEach(function (bouton) {
+      bouton.addEventListener("click", function (e) {
+        //const parent = $(e.target).parent().parent();
+        const isPrivate = bouton.getAttribute("isPrivate");
+        const idGroup = bouton.getAttribute("groupKey");
+        if (isPrivate == 1) {
+          bouton.innerHTML = "Demande envoyé";
         }
-      })
-    });
-  });
+        else {
+          
+          bouton.innerHTML = "Afficher le groupe";
+          console.log($('.Bgroupe'));
+          bouton.removeEventListener('click', this);
 
+          bouton.addEventListener('click', function (e) {
+            window.location = `./feed-group.php?${idGroup}`;
+          });
+  
+        }
+        const value = { "idGroup": idGroup, "isPrivate": isPrivate, "userKey": userKey };
+        // console.log(value);
+        // console.log(parent);
+        ajaxRequest("POST", "./server/join_group.php", value, (data) => {
+          if (data) {
+            // console.log(data);
+          }
+        })
+      });
+    });
+  }
+ 
+  partialRefresh(true, getGroup, 15000);
+  partialRefresh(true, getYourGroup, 15000);
+  $("#refresh-all").click(function(e) {
+    getGroup();
+    viderContainer("#renderYourGroup");
+    getYourGroup();
+    rejoindreGroupe();
+    
+    $(this).addClass("spin");
+    setTimeout(() => {
+      $(this).removeClass("spin");
+    },1000);
+  });
 });
 function getGroup() {
   ajaxRequest("POST", "./server/get_group.php", { 'userKey': userKey }, (data) => {
-    renderGroups(data)
+    viderContainer('#renderGroup');
+    renderGroups(data);
   });
 }
+
 function getYourGroup() {
   ajaxRequest("POST", "./server/get_your_group.php", { 'userKey': userKey }, (data) => {
+    viderContainer('#renderYourGroup');
     renderYourGroups(data)
   });
 }
@@ -66,9 +88,9 @@ function renderGroup(groupe) {
   if (groupe.isJoin == 0) {
     bouton = `<button disabled  id='messagePriver' groupKey='${groupe.idGroupe}' isPrivate=${groupe.isPrivate}  class="Bgroupe2" type="button">${text}</button>`;
   }
-  return `<div class="gallery" idGroupe='${groupe.idGroupe}'>
+  return `<div class="gallery" style="border-radius: 10px;" idGroupe='${groupe.idGroupe}'>
   <a target="_blank" href="${groupe.imageUrl}">
-  <div class="image-groupe" style="background-image:url(${groupe.imageUrl})"></div>
+  <div class="image-groupe" style="background-image:url(${groupe.imageUrl}); border-radius: 10px 10px 0 0;"></div>
   </a>
   <div class="titre-groupe">${groupe.name}</div>
   <div class="desc">

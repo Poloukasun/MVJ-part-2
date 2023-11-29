@@ -334,6 +334,14 @@ if (!is_logged()) {
         .create-group-btn {
             font-size: larger;
         }
+
+        .group-btn-chat {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .group-btn-chat:hover {
+            color:red;
+        }
     </style>
 </head>
 

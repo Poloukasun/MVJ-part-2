@@ -158,6 +158,7 @@ div.gallery {
     background-color: white;
     border-radius: 15px;
     margin: 10px;
+    overflow: hidden;
 }
 
 div.gallery:hover {
