@@ -1,17 +1,18 @@
-import {getCookie, ajaxRequest, log, viderContainer, partialRefresh, defilerBas} from "./functions.js";
+import { getCookie, ajaxRequest, log, viderContainer, partialRefresh, defilerBas } from "./functions.js";
 const userKey = getCookie("userKey");
-let friendKey='';
+let friendKey = '';
 let messages = [];
 let nbMessages = 0;
-let idMessage=0;
+let idMessage = 0;
 let lastId = 0;
-let messagesInterval=0;
-let todelete= false;
+let messagesInterval = 0;
+let todelete = false;
 let edite = false;
 
 $(document).ready(() => {
 
-    function renderFriend (f) {
+    function renderFriend(f) {
+        console.log(f);
         return `
             <div userKey=${f.userKey} class="user"><img src=${f.profilePic ?? "./profil-default.jpg"}>${f.firstName}</div>
         `;
@@ -19,11 +20,11 @@ $(document).ready(() => {
 
     function chooseFriend() {
         $('.user').click((e) => {
-            if(friendKey != $(e.target).attr('userKey')) {
+            if (friendKey != $(e.target).attr('userKey')) {
                 friendKey = $(e.target).attr('userKey');
-                ajaxRequest("POST", "./server/change_friends.php", {friendKey:friendKey}, (friend) => {
+                ajaxRequest("POST", "./server/change_friends.php", { friendKey: friendKey }, (friend) => {
                     viderContainer("#chatArea");
-                    nbMessages=0;
+                    nbMessages = 0;
                     $('#chatArea').append(getChatHeader(friend));
                     $("#chatArea").append(renderMessagesContainer());
                     $("#chatArea").append(getMessageInputArea());
@@ -31,18 +32,18 @@ $(document).ready(() => {
                     getTheLastMessage();
                     partialRefresh(false, null, null, messagesInterval);
                     messagesInterval = partialRefresh(true, getTheLastMessage, 1000, messagesInterval);
-                    eventsOfSending();  
+                    eventsOfSending();
                     // hoverMessage();
                     $("#delete").click((e) => {
                         idMessage = $(e.target).attr('idMessage');
-                        todelete=true;
+                        todelete = true;
                     });
                 });
             }
         });
     }
 
-    
+
 
     function getChatHeader(friend) {
         return `
@@ -58,7 +59,7 @@ $(document).ready(() => {
         chooseFriend();
     }
 
-    function getMessageInputArea () {
+    function getMessageInputArea() {
         return `
         <div id="messageInputArea">
             <input id=message type="text" placeholder="Votre message...">
@@ -69,26 +70,26 @@ $(document).ready(() => {
 
     function fillFriendsList() {
         let friends = [];
-        ajaxRequest("GET", "./server/get_friends.php", {userKey:userKey}, (res) => {
+        ajaxRequest("GET", "./server/get_friends.php", { userKey: userKey }, (res) => {
             friends = res;
         });
-        
-        if (friends.length>0) {
+
+        if (friends.length > 0) {
             renderFriends(friends);
         }
     }
 
-    function showMessage(m, showMy=false) {
-        
-        if(m.connectedUserId === m.idSender && showMy) {
+    function showMessage(m, showMy = false) {
+
+        if (m.connectedUserId === m.idSender && showMy) {
             $("#chatMessages").append(renderMessage("my-message", m));
-        } else if(m.connectedUserId !== m.idSender) {
+        } else if (m.connectedUserId !== m.idSender) {
             $("#chatMessages").append(renderMessage("f-message", m));
         }
     }
 
     function renderMessages(msg) {
-        if(Array.isArray(msg)) {
+        if (Array.isArray(msg)) {
             viderContainer("#chatMessages");
             msg.forEach((m) => {
                 showMessage(m, true)
@@ -96,16 +97,16 @@ $(document).ready(() => {
         } else {
             showMessage(msg);
         }
-         
+
     }
 
-    function renderMessagesContainer () {
+    function renderMessagesContainer() {
         return `
             <div id=chatMessages></div>
         `;
     }
 
-    function renderMessage (classe, msg) {
+    function renderMessage(classe, msg) {
         return `
             <div class="${classe} message" id=${msg.idMessage}> 
                 ${msg.content}
@@ -117,16 +118,16 @@ $(document).ready(() => {
 
     function hoverMessage() {
         $('.message')
-        .mouseover((e) => {
-            const id = $(e.target).closest('.message').attr('id');
-            
-        })
-        .mouseout((e) => {
-            console.log('out');
-            $('.container-menu').css('display', 'none');
+            .mouseover((e) => {
+                const id = $(e.target).closest('.message').attr('id');
 
-        });
-        
+            })
+            .mouseout((e) => {
+                console.log('out');
+                $('.container-menu').css('display', 'none');
+
+            });
+
     }
 
     function newMessage() {
@@ -139,11 +140,11 @@ $(document).ready(() => {
     }
 
     function getAllMessagesWith() {
-        ajaxRequest("POST", "./server/get_messages_with_friend.php", {userKey:userKey, friendKey:friendKey, last:nbMessages}, (res) => {
+        ajaxRequest("POST", "./server/get_messages_with_friend.php", { userKey: userKey, friendKey: friendKey, last: nbMessages }, (res) => {
             nbMessages = messages.length;
             messages = res;
-            if(messages.length>0) {
-                lastId = messages[messages.length-1].idMessage;
+            if (messages.length > 0) {
+                lastId = messages[messages.length - 1].idMessage;
                 renderMessages(messages);
             } else {
                 console.log("Vous n'avez aucun message... Démarrez la conversation!");
@@ -152,7 +153,7 @@ $(document).ready(() => {
     }
 
     function getTheLastMessage() {
-        ajaxRequest("POST", "./server/get_last_message.php", { userKey:userKey, friendKey:friendKey, lastId:lastId }, (lastMessage) => {
+        ajaxRequest("POST", "./server/get_last_message.php", { userKey: userKey, friendKey: friendKey, lastId: lastId }, (lastMessage) => {
             console.log(lastMessage);
             lastId = lastMessage.idMessage;
             renderMessages(lastMessage);
@@ -161,10 +162,10 @@ $(document).ready(() => {
 
     function send() {
         const message = newMessage();
-        ajaxRequest("POST", "./server/add_message.php", {message:message}, (msg) => {
+        ajaxRequest("POST", "./server/add_message.php", { message: message }, (msg) => {
             $('#chatMessages').append(renderMessage("my-message", msg));
             $('#message').val('');
-        });    
+        });
     }
 
     function eventsOfSending() {
@@ -173,7 +174,7 @@ $(document).ready(() => {
         });
 
         $("#message").keypress((e) => {
-            if(e.key === 'Enter') 
+            if (e.key === 'Enter')
                 send();
         });
     }
