@@ -32,7 +32,7 @@ class MarketDao extends AbstractDao
 
   public static function get_Group($idUser)
   {
-    $request = "SELECT r.*, p.urlImage, p.isImage, p.description FROM `Recordings` r LEFT JOIN Publications p ON r.idPub = p.idPublication WHERE r.idUser = ?";
+    $request = "SELECT r.*, p.urlImage, p.isImage, p.description FROM `Recordings` r LEFT JOIN Publications p ON r.idPub = p.idPublication WHERE r.idUser = ? ORDER BY r.idRecording DESC";
     $stmt = self::process($request, [$idUser])[1]->fetchAll(PDO::FETCH_ASSOC);
     return $stmt;
   }

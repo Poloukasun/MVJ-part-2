@@ -97,6 +97,7 @@ const renderFriends = (friends) => {
 }
 
 const renderUser = (user, element) => {
+  console.log(user);
   return `
           <div class="profil" userKey='${user.userKey}'>
             <a href="./profil.php?${user.userKey}" style="text-decoration: none;">

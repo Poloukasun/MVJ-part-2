@@ -98,7 +98,7 @@ class UserDao extends AbstractDao
         $pub = 0;
         $pdo = Database::connect();
         try {
-            $sql = "SELECT * from Publications where idUser = ?";
+            $sql = "SELECT * from Publications where idUser = ? ORDER BY publicationDate DESC";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$value]);
             while ($row = $stmt->fetch()) {
@@ -112,12 +112,12 @@ class UserDao extends AbstractDao
                     $isImage = $row['isImage'];
                     if ($isImage == 1) {
                         echo '<div class="image-pub-profil" style="background-image: url(' . $row['urlImage'] . ')">
-                                <div class="titre" idpub="' . $row['idPublication'] . '">' . $row['description'] . '</div>
+                                <div class="titre" title="Voir la publication" idpub="' . $row['idPublication'] . '">' . $row['description'] . '</div>
                             </div>';
                     } else if ($isImage == 0) {
                         echo '
                         <div class="image-pub-profil">
-                        <div class="titre" style="border-top: 1px solid rgb(173, 173, 173); top:-1px" idpub="' . $row['idPublication'] . '">' . $row['description'] . '</div>
+                        <div class="titre" title="Voir la publication" style="border-top: 1px solid rgb(173, 173, 173); top:-1px" idpub="' . $row['idPublication'] . '">' . $row['description'] . '</div>
                         <video controls loop webkit-playsinline playsinline>
                             <source src="' . $row['urlImage'] . '">
                             Your browser does not support the video tag.

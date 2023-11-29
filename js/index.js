@@ -46,7 +46,9 @@ export function handlePubPic() {
                 }
             }
             let container = document.querySelector(".container-feed-group");
-            container.scrollTop = container.scrollHeight;
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
         }
     }
 
@@ -137,7 +139,7 @@ function renderEnregistrement(pub) {
         console.log(pub.urlImage);
         return `
         <div class="image-pub-profil">
-        <div class="titre" style="border-top: 1px solid rgb(173, 173, 173); top:-1px" idpub="${pub.idPub}">${pub.description}</div>
+        <div class="titre" title="Voir la publication" style="border-top: 1px solid rgb(173, 173, 173); top:-1px" idpub="${pub.idPub}">${pub.description}</div>
         <video controls loop webkit-playsinline playsinline>
             <source src="${pub.urlImage}">
             Your browser does not support the video tag.
@@ -146,7 +148,7 @@ function renderEnregistrement(pub) {
 
     }
     if (pub.isImage == 1) {
-        return `<div class="image-pub-profil" style="background-image: url(${pub.urlImage})">
+        return `<div class="image-pub-profil" title="Voir la publication" style="background-image: url(${pub.urlImage})">
                                 <div class="titre" idpub="${pub.idPub}">${pub.description}</div>
                             </div>`;
     }
@@ -178,5 +180,13 @@ $("#back").click((e) => {
 function handleBackgroundProfil() {
     $('#back-color').change((e) => {
         $('.profile-header').css('background-color', e.target.value);
+        setCookie("couleur_background", e.target.value, 365);
     });
+}
+
+function setCookie(nom, valeur, jours) {
+    var date = new Date();
+    date.setTime(date.getTime() + (jours * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + date.toUTCString();
+    document.cookie = nom + "=" + valeur + "; " + expires + "; path=/";
 }

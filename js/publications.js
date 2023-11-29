@@ -81,12 +81,12 @@ function renderPublication(pub) {
             <div class="date-publication" dir="auto">${formatRelativeDate(pub.publicationDate)}</div>
         </div>
         </div>
-    <div class="titre" dir="auto">${pub.description}</div>
+    <div class="titre" title="${pub.description}" dir="auto">${pub.description}</div>
     ${pub.isImage == 1 ? `
     <div class="image-pub-container" style="background-image: url(${pub.urlImage});">
     ` : `
     <div class="image-pub-container video">
-    <video width="90%" controls loop webkit-playsinline playsinline>
+    <video width="90%" controls loop webkit-playsinline ddplaysinline>
       <source src="${pub.urlImage}">
       Your browser does not support the video tag.
     </video>`}
@@ -163,9 +163,20 @@ function search(pub, q) {
   return name.includes(q) || pub.description.toLowerCase().includes(q) || groupName.includes(q);
 }
 
+function comparer(a, b) {
+  if (a.friendshipsState !== b.friendshipsState) {
+    return b.friendshipsState - a.friendshipsState;
+  }
+
+  return a.publicationDate - b.publicationDate;
+}
+
 function get() {
   ajaxRequest("GET", "./server/get_publications_sse.php", { userKey: userKey, nbPubs: nombrePubs }, (data) => {
     let pubs = data[0];
+
+    pubs = pubs.sort(comparer);
+
     if (pubs.length > 0 && nombrePubs !== pubs.length) {
       nombrePubs = pubs.length;
 
