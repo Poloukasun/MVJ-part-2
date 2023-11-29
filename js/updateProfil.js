@@ -191,9 +191,7 @@ $(document).ready(() => {
           $("#mdp").val('');
           $('#Nmdp').val('');
         }
-
         validerTousLesChamps();
-      
       }
     });
   });
