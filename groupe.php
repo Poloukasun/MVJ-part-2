@@ -29,57 +29,39 @@ else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
     background-color: rgb(220, 220, 220) !important;
   }
 
-  div.gallery {
-    margin: 5px;
-    border: 1px solid #ccc;
-    float: left;
-    width: 300px;
-    height: 320px;
-    background-color: white;
-  }
-
-  div.gallery:hover {
-    border: 1px solid #777;
-  }
-
-  div.gallery img {
-    width: 100%;
-    height: auto;
-  }
-
-  div.desc {
-    padding: 15px;
-    text-align: center;
-  }
   #refresh-all {
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
   }
+
   #refresh-all:hover {
-      transform: translateY(-5px);
+    transform: translateY(-5px);
   }
-  @keyframes spin{
-    0%{
+
+  @keyframes spin {
+    0% {
       transform: rotate(0deg);
     }
-    100%{
+
+    100% {
       transform: rotate(360deg);
     }
   }
-  .spin{
+
+  .spin {
     animation: spin 1s linear infinite;
   }
 </style>
 
 <body>
-  <div style="display: flex; height:100%">
+  <div class="groupe-main">
     <!-- le nav sur le coter gauche -->
-    <div class="groupe-container">
+    <div class="groupe-container-group">
       <h1 class="nav-groupe">Groupes <i title="Tout rafraichir" id="refresh-all" class="fa fa-refresh" aria-hidden="true"></i></h1>
       <button class="nav-groupe choix selected" id="all-btn"> <i class="far fa-calendar-alt"></i> Tous les groupes</button><br>
       <button class="nav-groupe choix" id="Create-btn"> <i class="fas fa-plus"></i> Créer un nouveau groupe</button>
       <hr style="width: 90%;">
-      <span class="nav-groupe"><b>Groupes dont vous êtes membre</b></span><br>
+      <span class="nav-groupe" style="margin-left: 20px;display: block;"><b>Groupes dont vous êtes membre</b></span>
       <!-- Affichage des groupes dont vous êtes membres -->
       <?php //GroupDao::Afficher_group_rejoin($user['idUser']) 
       ?>
@@ -111,6 +93,6 @@ else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
       document.location.href = './groupCreation.php';
     });
 
-    
+
   });
 </script>

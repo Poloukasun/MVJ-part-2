@@ -38,7 +38,7 @@ export const afficherNotification = (temps, message) => {
 
 
 $(document).ready(() => {
-  
+
   const updateUser = () => {
     const newUser = {};
 
@@ -53,7 +53,7 @@ $(document).ready(() => {
     if (newUser.email === "") {
       newUser.email = $("#email").val();
     }
-    
+
     return newUser;
   };
   const changeDisplay = (tag, NewId, text, dis, c) => {
@@ -169,7 +169,10 @@ $(document).ready(() => {
           u.profilePic = "profil/default-profile-pic-.jpg";
         }
         $("#thumb").attr("src", u.profilePic);
-        afficherNotification(2000, "C'est fait!");
+        afficherNotification(1000, "C'est fait!");
+        setTimeout(function () {
+          history.back();
+        }, 2000);
 
         if (openMail) {
           $("#Nemail").val('');

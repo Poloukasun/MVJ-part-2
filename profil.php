@@ -76,12 +76,15 @@ require_once("./header.php");
   <?php require_once("./header.php"); ?>
   <main>
     <div class="profile-header" style="background-color: <?= isset($_COOKIE['couleur_background']) ? $_COOKIE['couleur_background'] : '' ?>">
-      <div class="profile-image" style="background-image: url(<?= $user['profilePic'] ?>);">
-      </div>
+      <a href="<?= $user['profilePic'] ?>" class="profile-image-a">
+        <div class="profile-image" style="background-image: url(<?= $user['profilePic'] ?>);"></div>
+      </a>
       <div class="profile-info">
         <h1 class="profile-name"><?= $user['firstName'] ?> <?= $user['lastName'] ?>
           <?php if ($connected_user && $idUserKey == $_SESSION['userKey']) : ?>
-            <button class="btn-modify">Modifier mon profil</button>
+            <br>
+            <button class="btn-modify"><i class="fa-solid fa-pen-to-square"></i> Modifier mon profil</button>
+            <button id="voirEnregistrement"><i id="font" class="fas fa-bookmark"></i> Enregistrements</button>
           <?php endif; ?>
         </h1>
         <div class="profile-stats">
@@ -89,10 +92,6 @@ require_once("./header.php");
           <span class="friends"><?= $friend['nb_friend'] ?> amis</span>
         </div>
         <div class="bio"><?= $user['bio'] ?></div>
-        <?php if ($connected_user && $idUserKey == $_SESSION['userKey']) : ?>
-          <button id="voirEnregistrement" style="width: 150px;margin-top: 15px;"><i id="font" class="fas fa-bookmark"></i> Enregistrements</button>
-        <?php endif; ?>
-        <!--  -->
       </div>
       <?php if ($connected_user && $idUserKey == $_SESSION['userKey']) : ?>
         <div>

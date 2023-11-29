@@ -10,6 +10,10 @@ body {
     user-select: none;
 }
 
+main {
+    min-width: 523px;
+}
+
 .profile-header {
     display: flex;
     background-color: #ffffff;
@@ -21,6 +25,11 @@ body {
     border-radius: 10px;
     margin: 20px;
     flex-wrap: wrap;
+}
+
+.profile-image-a {
+    cursor: pointer;
+    border-radius: 50%;
 }
 
 .profile-image {
@@ -63,7 +72,8 @@ body {
     font-weight: 500;
 }
 
-.btn-modify {
+.btn-modify,
+#voirEnregistrement {
     margin-top: 20px;
     cursor: pointer;
     border-radius: 20px;
@@ -75,9 +85,11 @@ body {
     font-size: 20px;
     padding: 0 30px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 250px;
 }
 
-.btn-modify:hover {
+.btn-modify:hover,
+#voirEnregistrement:hover {
     background-color: #0056b3;
     transform: translateY(-5px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);

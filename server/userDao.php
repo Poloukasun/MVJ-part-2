@@ -113,6 +113,7 @@ class UserDao extends AbstractDao
                     if ($isImage == 1) {
                         echo '<div class="image-pub-profil" style="background-image: url(' . $row['urlImage'] . ')">
                                 <div class="titre" title="Voir la publication" idpub="' . $row['idPublication'] . '">' . $row['description'] . '</div>
+                                <a href="' . $row['urlImage'] . '" style="z-index: index 1; width: 500px; height: 462px"></a>
                             </div>';
                     } else if ($isImage == 0) {
                         echo '

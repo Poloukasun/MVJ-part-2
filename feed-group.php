@@ -6,10 +6,12 @@ require_once("./sessions.php");
 require_once("./server/groupDao.php");
 $user = null;
 
-if (!is_logged())
+if (!is_logged()) {
   header("Location:login_register.php");
-
-else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
+  exit;
+} else {
+  $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
+}
 if ($user['profilePic'] == null) {
   $user['profilePic'] = 'default-profile-pic-.jpg';
 }
@@ -20,6 +22,7 @@ $query_string = $_SERVER['QUERY_STRING'];
 $param_value = getParamValue($query_string);
 if ($param_value == null) {
   header("Location:./groupe.php");
+  exit;
 } else {
   $info = GroupDao::get_Group($param_value);
 }
@@ -51,6 +54,7 @@ function getParamValue($query_string)
 
 if (!GroupDao::user_in_group($user, $param_value)) {
   header('Location:./feed-group.php?' . $_SESSION['idGroup']);
+  exit;
 } else {
   $_SESSION['idGroup'] = $param_value;
 }
@@ -76,7 +80,7 @@ $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
 </head>
 
 <body>
-  <div style="display: flex; height:100%">
+  <div class="feed-group-container">
     <!-- le nav sur le coter gauche -->
     <div class="groupe-container">
       <a style="text-decoration: none;" href="./feed-group.php?<?= $param_value ?>"></style>
@@ -122,7 +126,9 @@ $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
     <!-- Affichage des groupes rejoin -->
     <div style="display: grid; width:100%;overflow-y:scroll;" class="container-feed-group">
       <div class="bigDiv" id="groupe">
-        <div class="imageGeant" style="background-image: url(<?= $info['imageUrl'] ?>);"></div>
+        <a href="<?= $info['imageUrl'] ?>">
+          <div class="imageGeant" style="background-image: url(<?= $info['imageUrl'] ?>);"></div>
+        </a>
         <div class="nomGroupe"><?= $info['name'] ?></div>
         <div class="image-container">
         </div>
@@ -172,6 +178,7 @@ $pPicUrl = UserDao::get_user_by($_SESSION['userKey'], 'userKey')['profilePic'];
       </div>
       <div id="all-Member" style="display: none;font-size: xx-large;text-align: center;">
       </div>
+      <footer style="height: 100px"></footer>
     </div>
   </div>
 

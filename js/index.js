@@ -150,6 +150,7 @@ function renderEnregistrement(pub) {
     if (pub.isImage == 1) {
         return `<div class="image-pub-profil" title="Voir la publication" style="background-image: url(${pub.urlImage})">
                                 <div class="titre" idpub="${pub.idPub}">${pub.description}</div>
+                                <a href="${pub.urlImage}" style="z-index: index 1; width: 500px; height: 462px"></a>
                             </div>`;
     }
 
