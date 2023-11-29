@@ -56,7 +56,7 @@ else $user = UserDao::get_user_by($_SESSION['userKey'], "userKey");
 <body>
   <div class="groupe-main">
     <!-- le nav sur le coter gauche -->
-    <div class="groupe-container-group">
+    <div class="groupe-container-group" style="background-color: white;">
       <h1 class="nav-groupe">Groupes <i title="Tout rafraichir" id="refresh-all" class="fa fa-refresh" aria-hidden="true"></i></h1>
       <button class="nav-groupe choix selected" id="all-btn"> <i class="far fa-calendar-alt"></i> Tous les groupes</button><br>
       <button class="nav-groupe choix" id="Create-btn"> <i class="fas fa-plus"></i> Créer un nouveau groupe</button>
