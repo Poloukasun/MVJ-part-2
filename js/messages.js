@@ -542,6 +542,8 @@ $(document).ready(() => {
         ajaxRequest("POST", "./server/create_chat_group.php", { group: group, userKey: userKey }, (res) => {
           if(res) {
             showMessangerPage();
+            quitDeleteChatEvents();
+            chooseGroup();
           }
         });
       } else {
